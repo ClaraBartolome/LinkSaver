@@ -11,13 +11,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.testcomposeapp.ui.theme.TestComposeAppTheme
 
 @Composable
-fun AddLinkScreen() {
+fun Settings() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "AddLinkScreen")
+        Text(text = "Settings")
     }
 }
 
@@ -25,6 +25,6 @@ fun AddLinkScreen() {
 @Composable
 private fun AddLinkScreenPreview() {
     TestComposeAppTheme {
-        AddLinkScreen()
+        Settings()
     }
 }

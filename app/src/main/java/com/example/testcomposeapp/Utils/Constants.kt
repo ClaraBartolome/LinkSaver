@@ -3,7 +3,7 @@ package com.example.testcomposeapp.Utils
 enum class LinkScreens(){
     Start,
     Add,
-    Config,
+    Settings,
     Edit
 }
 

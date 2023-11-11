@@ -12,12 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.testcomposeapp.Utils.longText
 import com.example.testcomposeapp.ui.theme.TestComposeAppTheme
 import com.example.testcomposeapp.ui.theme.lightGreen
 
 @Composable
-fun linkCard(title: String = ""){
+fun LinkCard(title: String = ""){
     Box(modifier = Modifier
         .padding(horizontal = 16.dp, vertical = 8.dp)
         .fillMaxSize()
@@ -38,7 +37,7 @@ fun DefaultPreview() {
     TestComposeAppTheme {
         LazyColumn() {
             items(5){
-                linkCard()
+                LinkCard()
             }
         }
     }
