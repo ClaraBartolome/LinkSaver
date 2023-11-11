@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "link_table")
 data class LinkModel(
-    @PrimaryKey(autoGenerate = true)var id: Int,
+    @PrimaryKey(autoGenerate = true)var id: Int = 0,
     @ColumnInfo (name = "name", defaultValue = "")var name: String = "",
     @ColumnInfo (name = "link", defaultValue = "")var link: String = "",
     @ColumnInfo (name = "dateOfCreation", defaultValue = "")var dateOfCreation: String = "",
