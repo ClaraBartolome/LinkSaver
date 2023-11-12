@@ -31,7 +31,6 @@ import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.example.linksaverapp.R
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Calendar
 import java.util.Locale
 
@@ -51,7 +50,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
 
     //Bottomsheet
     val isSheetOpen = remember { mutableStateOf(false) }
-
+    val isAlertOpen = remember { mutableStateOf(false) }
+    
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color =  MaterialTheme.colors.primary
@@ -59,7 +59,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
 
     Scaffold(
         topBar = {
-            TopAppBarConfig(navController = navController, screen, linkModelIsValid.value) {
+            TopAppBarConfig(navController = navController, screen, linkModelIsValid, isAlertOpen) {
                 insertLink(
                     linkSaverViewModel = linkSaverViewModel,
                     name = nameText,
@@ -68,11 +68,6 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     isProtected = isProtected,
                     linkModelIsValid = linkModelIsValid
                 )
-                linkText.value = ""
-                nameText.value = ""
-                folderText.value = ""
-                isProtected.value = false
-                linkModelIsValid.value = true
             }
         }
     ) { innerPadding ->
@@ -84,6 +79,11 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             composable(route = LinkScreens.Start.name) {
                 screen = LinkScreens.Start
                 GetAllLinksByName(linkSaverViewModel = linkSaverViewModel)
+                linkText.value = ""
+                nameText.value = ""
+                folderText.value = ""
+                isProtected.value = false
+                linkModelIsValid.value = true
                 ScrollContent(allLinks = links, isSheetOpen) { link ->
                     DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
                     GetAllLinksByName(linkSaverViewModel = linkSaverViewModel)
@@ -98,11 +98,24 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 Settings()
             }
         }
+        if(isAlertOpen.value){
+            AlertDialog(
+                onDismissRequest = {
+                                   isAlertOpen.value = false
+                                   },
+                onConfirmation = {
+                    isAlertOpen.value = false
+                    navController.popBackStack()
+                                 },
+                dialogTitle = "No has guardado los cambios",
+                dialogText = "¿Estás seguro de que quieres salir?"
+            )
+        }
     }
 }
 
 private fun validateLinkModel(name: String, link: String): Boolean {
-    return name.isNotBlank() && name.isNotEmpty() && link.isNotBlank() && link.isNotEmpty()
+    return name.isNotBlank() && link.isNotBlank()
 }
 
 private fun insertLink(linkSaverViewModel: LinkSaverViewModel, name: MutableState<String>, link: MutableState<String>, folder: MutableState<String>, isProtected: MutableState<Boolean>, linkModelIsValid: MutableState<Boolean>){
@@ -158,7 +171,8 @@ private fun TitleText(screen: LinkScreens) {
 private fun TopAppBarConfig(
     navController: NavHostController,
     screen: LinkScreens,
-    isLinkModelValid: Boolean,
+    isLinkModelValid: MutableState<Boolean>,
+    isAlertOpen: MutableState<Boolean>,
     addLinkAction: () -> Unit
 ) {
     val context = LocalContext.current
@@ -175,8 +189,7 @@ private fun TopAppBarConfig(
                 else -> {
                     IconButtonApp(iconId = R.drawable.ic_arrow_back, action = {
                         if (screen == LinkScreens.Add) {
-                            addLinkAction.invoke()
-                            if (isLinkModelValid) navController.popBackStack()
+                            isAlertOpen.value = true
                         }
                     })
                 }
@@ -195,7 +208,7 @@ private fun TopAppBarConfig(
                 LinkScreens.Add -> {
                     IconButtonApp(iconId = R.drawable.ic_check, action = {
                         addLinkAction.invoke()
-                        if (isLinkModelValid) navController.popBackStack()})
+                        if (isLinkModelValid.value) {navController.popBackStack()}})
                 }
 
                 LinkScreens.Settings -> {
