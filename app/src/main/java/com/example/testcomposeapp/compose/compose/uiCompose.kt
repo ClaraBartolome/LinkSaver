@@ -2,11 +2,12 @@ package com.example.testcomposeapp.compose.compose
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -14,10 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +32,7 @@ import com.example.testcomposeapp.Utils.LinkScreens
 import com.example.testcomposeapp.compose.UiComposeViewhelper.searchLink
 import com.example.testcomposeapp.compose.UiComposeViewhelper.sortLinks
 import com.example.testcomposeapp.db.Model.LinkModel
+import com.example.testcomposeapp.ui.theme.TestComposeAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 val TAG = "START_SCREEN"
@@ -42,6 +47,10 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val nameText = remember { mutableStateOf("") }
     val isProtected = remember { mutableStateOf(false) }
     val linkModelIsValid = remember { mutableStateOf(true) }
+
+    //Bottomsheet
+    val isSheetOpen = remember { mutableStateOf(false) }
+    val haptics = LocalHapticFeedback.current
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
@@ -63,7 +72,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     )
                 }
             }
-        },
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -76,7 +85,9 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     linkSaverViewModel.getAllLinksByName()
                     Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
                 }
-                ScrollContent(allLinks = links)
+                ScrollContent(allLinks = links, isSheetOpen) {
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                }
             }
             composable(route = LinkScreens.Add.name) {
                 screen = LinkScreens.Add
@@ -169,6 +180,15 @@ private fun IconButtonApp(iconId: Int, action: () -> (Unit), contentDescription:
             painter = painterResource(id = iconId),
             contentDescription = contentDescription
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AddLinkScreenPreview() {
+    TestComposeAppTheme {
+
     }
 }
 

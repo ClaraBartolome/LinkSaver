@@ -33,6 +33,11 @@ import java.net.URL
 @Composable
 fun AddLinkScreen(nameText: MutableState<String>, linkText: MutableState<String>, isProtected: MutableState<Boolean>, linkModelValid: MutableState<Boolean>) {
 
+    nameText.value = ""
+    linkText.value = ""
+    isProtected.value = false
+    linkModelValid.value = true
+
     Column(
         modifier = Modifier
             .fillMaxSize()
