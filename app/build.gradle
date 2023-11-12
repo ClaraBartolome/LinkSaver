@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.testcomposeapp'
+    namespace 'com.example.linksaverapp'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.testcomposeapp"
+        applicationId "com.example.linksaverapp"
         minSdk 24
         targetSdk 33
         versionCode 1
