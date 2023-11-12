@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
@@ -19,9 +19,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.linksaverapp.R
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import java.net.MalformedURLException
@@ -40,10 +42,10 @@ fun AddLinkScreen(nameText: MutableState<String>, linkText: MutableState<String>
 
         OutlinedTextField(value = nameText.value,
             onValueChange = { nameText.value = it },
-            label = { Text("Nombre") },
+            label = { Text("Nombre", color = if(!linkModelValid.value && nameText.value.isBlank()) Color.Red else Color.DarkGray) },
             singleLine = true,
-            placeholder = { if(!linkModelValid.value && (nameText.value.isBlank() || nameText.value.isEmpty())) Text("Tienes que introducir un nombre") },
-            isError = !linkModelValid.value && (nameText.value.isBlank() || nameText.value.isEmpty()),
+            supportingText = { if(!linkModelValid.value && nameText.value.isBlank()) Text("Tienes que introducir un nombre", fontSize = 12.sp, color = Color.Red) },
+            isError = !linkModelValid.value && nameText.value.isBlank(),
             modifier = Modifier.fillMaxWidth())
 
         OutlinedTextField(value = linkText.value,
@@ -51,10 +53,10 @@ fun AddLinkScreen(nameText: MutableState<String>, linkText: MutableState<String>
                 linkText.value = it
                 nameText.value = getName(linkText.value)
                             },
-            label = { Text("Enlace") },
+            label = { Text("Enlace", color = if(!linkModelValid.value && linkText.value.isBlank()) Color.Red else Color.DarkGray) },
             singleLine = true,
-            placeholder = { if(!linkModelValid.value && (linkText.value.isBlank() || linkText.value.isEmpty())) Text("Tienes que introducir un enlace") },
-            isError = !linkModelValid.value && (linkText.value.isBlank() || linkText.value.isEmpty()),
+            supportingText = {if(!linkModelValid.value && linkText.value.isBlank()) Text("Tienes que introducir un enlace", fontSize = 12.sp, color = Color.Red)},
+            isError = !linkModelValid.value && linkText.value.isBlank(),
             modifier = Modifier.fillMaxWidth())
 
         Row(modifier= Modifier

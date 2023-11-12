@@ -1,28 +1,91 @@
 package com.example.linksaverapp.compose
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import com.example.linksaverapp.LinkSaverViewModel
+import com.example.linksaverapp.compose.compose.TAG
 import com.example.linksaverapp.db.Model.LinkModel
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
-object UiComposeViewhelper {
 
-    //PODRIA HACER UNA CONFIGURACION PARA MOSTRAR POR DEFECTO EL HOST O EL PATH
-    public fun testURL(): String{
-        val url = URL("https://developer.android.com/jetpack/compose/tutorial?hl=es-419")
-        return url.path
+//PODRIA HACER UNA CONFIGURACION PARA MOSTRAR POR DEFECTO EL HOST O EL PATH
+fun testURL(): String {
+    val url = URL("https://developer.android.com/jetpack/compose/tutorial?hl=es-419")
+    return url.path
+}
+
+fun sortLinks(context: Context) {
+    Toast.makeText(context, "Próximamente", Toast.LENGTH_SHORT).show()
+}
+
+fun searchLink(context: Context) {
+    Toast.makeText(context, "Próximamente", Toast.LENGTH_SHORT).show()
+}
+
+fun createLinkModel(
+    id: Int,
+    name: String,
+    link: String,
+    dateOfCreation: String,
+    dateOfModified: String,
+    folder: String,
+    isProtected: Int
+): LinkModel {
+    return LinkModel(id, name, link, dateOfCreation, dateOfModified, folder, isProtected)
+}
+
+private fun validateLinkModel(name: String, link: String): Boolean {
+    return name.isNotBlank() && link.isNotBlank()
+}
+
+fun insertLink(
+    linkSaverViewModel: LinkSaverViewModel,
+    name: MutableState<String>,
+    link: MutableState<String>,
+    folder: MutableState<String>,
+    isProtected: MutableState<Boolean>,
+    linkModelIsValid: MutableState<Boolean>
+) {
+    linkModelIsValid.value = validateLinkModel(name.value, link.value)
+    if (linkModelIsValid.value) {
+        linkSaverViewModel.insert(
+            LinkModel(
+                name = name.value,
+                link = link.value,
+                dateOfCreation = getDate(),
+                dateOfModified = getDate(),
+                folder = folder.value,
+                isProtected = if (isProtected.value) 1 else 0,
+            )
+        )
     }
+}
 
-    public fun sortLinks(context: Context){
-        Toast.makeText(context,"Próximamente", Toast.LENGTH_SHORT).show()
+private fun getDate(): String {
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    return formatter.format(time)
+}
+
+@Composable
+fun GetAllLinksByName(linkSaverViewModel: LinkSaverViewModel) {
+    LaunchedEffect(Unit) {
+        linkSaverViewModel.getAllLinksByName()
+        Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
     }
+}
 
-    public fun searchLink(context: Context){
-        Toast.makeText(context,"Próximamente", Toast.LENGTH_SHORT).show()
+@Composable
+fun DeleteLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel) {
+    LaunchedEffect(Unit) {
+        linkSaverViewModel.deleteLink(link)
+        Log.i(TAG, "DB deleted link: $link")
     }
-
-    public fun createLinkModel(id: Int, name: String, link: String, dateOfCreation: String, dateOfModified: String, folder: String, isProtected: Int): LinkModel{
-        return LinkModel(id, name, link, dateOfCreation, dateOfModified, folder, isProtected)
-    }
-
 }

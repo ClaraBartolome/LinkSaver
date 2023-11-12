@@ -3,8 +3,6 @@ package com.example.linksaverapp.compose.compose
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,8 +22,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.example.linksaverapp.R
+import com.example.linksaverapp.Utils.BottomBarOption
+import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
 fun BottomBarConfig(onDeleteLink: @Composable() () -> Unit) {
@@ -94,13 +93,4 @@ private fun DefaultBottombarPreview() {
     LinkSaverAppTheme {
         BottomBarConfig() {}
     }
-}
-
-private enum class BottomBarOption{
-    AddFolder,
-    AddFavorite,
-    Share,
-    Edit,
-    Delete,
-    None
 }
