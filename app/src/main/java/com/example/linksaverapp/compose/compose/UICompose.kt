@@ -35,6 +35,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val folderText = remember { mutableStateOf("") }
     val isProtected = remember { mutableStateOf(false) }
     val linkModelIsValid = remember { mutableStateOf(true) }
+    val foldersName = remember {mutableListOf<String>()}
+    foldersName.addAll(listOf("Favoritos", "Pistacho", "Fresa", "Mayonesa", "Elefante", "Privado"))
 
     //Bottomsheet
     val isSheetOpen = remember { mutableStateOf(false) }
@@ -79,7 +81,13 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             }
             composable(route = LinkScreens.Add.name) {
                 screen = LinkScreens.Add
-                AddLinkScreen(nameText, linkText, isProtected, linkModelIsValid)
+                AddLinkScreen(
+                    nameText,
+                    linkText,
+                    folderText,
+                    isProtected,
+                    linkModelIsValid,
+                    foldersName)
             }
             composable(route = LinkScreens.Settings.name) {
                 screen = LinkScreens.Settings
