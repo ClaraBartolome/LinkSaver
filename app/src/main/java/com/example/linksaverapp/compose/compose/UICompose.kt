@@ -20,7 +20,6 @@ import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.GetAllLinksByName
 import com.example.linksaverapp.compose.createFolderList
 import com.example.linksaverapp.compose.insertLink
-import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -94,7 +93,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     folderText,
                     isProtected,
                     linkModelIsValid,
-                    foldersName
+                    createFolderList(linkSaverViewModel.allLinks.value).keys
                 )
             }
             composable(route = LinkScreens.Settings.name) {

@@ -63,7 +63,8 @@ fun AddLinkScreen(
     folderName: MutableState<String>,
     isProtected: MutableState<Boolean>,
     linkModelValid: MutableState<Boolean>,
-    folderList: MutableList<String>) {
+    folderList: MutableSet<String>
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,7 +78,7 @@ fun AddLinkScreen(
         val showClearFolderButton = remember { mutableStateOf(false) }
         val expanded = remember { mutableStateOf(false) }
 
-        //Spacer(modifier = Modifier.height(16.dp))
+        folderList.remove("")
 
         OutlinedTextFieldCustom(
             valueText = nameText,
@@ -313,6 +314,6 @@ private fun AddLinkScreenPreview() {
             remember{mutableStateOf("")},
             remember{mutableStateOf(false)},
             remember{mutableStateOf(true)},
-            remember{mutableListOf()})
+            mutableSetOf())
     }
 }
