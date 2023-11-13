@@ -11,6 +11,10 @@ data class LinkModel(
     @ColumnInfo (name = "link", defaultValue = "")var link: String = "",
     @ColumnInfo (name = "dateOfCreation", defaultValue = "")var dateOfCreation: String = "",
     @ColumnInfo (name = "dateOfModified", defaultValue = "")var dateOfModified: String = "",
-    @ColumnInfo (name = "folder", defaultValue = "")var folder: String?,
+    @ColumnInfo (name = "folder")var folder: String? = null,
     @ColumnInfo (name = "isProtected", defaultValue = "0")var isProtected: Int = 0,
+)
+
+data class FolderList(
+    var linkList: MutableList<LinkModel>
 )
