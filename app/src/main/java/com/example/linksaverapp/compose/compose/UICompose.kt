@@ -50,6 +50,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     Scaffold(
         topBar = {
             TopAppBarConfig(navController = navController, screen, linkModelIsValid, isAlertOpen) {
+                //TODO capar carpeta NONE
                 insertLink(
                     linkSaverViewModel = linkSaverViewModel,
                     name = nameText,

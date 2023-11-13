@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.example.linksaverapp.R
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
+import com.example.linksaverapp.ui.theme.green50
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -90,7 +91,6 @@ fun AddLinkScreen(
         val showClearLinkButton = remember { mutableStateOf(false) }
         val showClearFolderButton = remember { mutableStateOf(false) }
         val expanded = remember { mutableStateOf(false) }
-        var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
         //Spacer(modifier = Modifier.height(16.dp))
 
@@ -114,6 +114,8 @@ fun AddLinkScreen(
             linkText.value = link
             nameText.value = getName(link)
         }
+
+        //Text("Si dejas el siguiente campo en blanco no se asignará a ninguna carpeta", fontSize = 12.sp, color = getColor())
 
         LazyColumn(){
             item {
@@ -144,6 +146,9 @@ fun AddLinkScreen(
                     Card(modifier = Modifier
                         .fillMaxWidth(),
                         shape = RectangleShape,
+                        colors = CardDefaults.cardColors(
+                            containerColor = getBGColor(),
+                        ),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ){
                         LazyColumn(
@@ -258,6 +263,7 @@ private fun OutlinedTextFieldFolderCustom(
         keyboardActions = KeyboardActions(onDone = {
             focusManager.moveFocus(FocusDirection.Down)
         }),
+        placeholder = { Text("None", color = getPlaceholderColor())},
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Text
@@ -276,7 +282,9 @@ private fun OutlinedTextFieldFolderCustom(
 fun ItemFolderSuggestion(folderName:String, onClick: (String) -> Unit){
     Row(modifier = Modifier
         .clickable { onClick(folderName) }){
-        Text(folderName, color = getColor(), modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 8.dp))
+        Text(folderName, color = getColor(), modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 8.dp))
     }
 }
 
@@ -287,6 +295,16 @@ private fun getName(url: String): String{
 @Composable
 private fun getColor(): Color{
     return if(isSystemInDarkTheme()) Color.White else Color.DarkGray
+}
+
+@Composable
+private fun getBGColor(): Color{
+    return if(!isSystemInDarkTheme()) green50 else Color.DarkGray
+}
+
+@Composable
+private fun getPlaceholderColor(): Color{
+    return if(isSystemInDarkTheme()) Color.White else Color.LightGray
 }
 
 @Throws(MalformedURLException::class)
