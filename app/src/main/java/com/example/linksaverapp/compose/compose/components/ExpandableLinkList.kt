@@ -1,24 +1,28 @@
 package com.example.linksaverapp.compose.compose.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.linksaverapp.db.Model.FolderList
+import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
+import com.example.linksaverapp.ui.theme.green50
 
 @Composable
 fun ExpandableLinkList(
     folderName: String? = null,
-    folderList: MutableList<LinkModel>
+    folderList: MutableList<LinkModel>,
+    linkPressed: (LinkModel?)-> Unit
 ) {
-    val expandedState = remember { mutableStateOf(true) }
+    val expandedState = remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -32,12 +36,13 @@ fun ExpandableLinkList(
         }
         if (expandedState.value) {
             item {
-                LazyColumn(){
-                    items(folderList){
-                        LinkCard(it.name) {}
-                    }
+                folderList.forEach {
+                    LinkCard(it.name) {linkPressed.invoke(it)}
                 }
             }
+        }
+        item {
+            Divider(color = green50, thickness = 1.dp)
         }
     }
 }
@@ -50,6 +55,6 @@ fun DefaultExpandableListPreview() {
             mutableListOf(
                 LinkModel(name= "Buzzfeed")
             )
-        )
+        ){}
     }
 }

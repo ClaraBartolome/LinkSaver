@@ -2,6 +2,8 @@ package com.example.linksaverapp.compose.compose.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -18,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
@@ -26,12 +30,14 @@ fun FolderHeader(title: String, expandedState: MutableState<Boolean>) {
         targetValue = if (expandedState.value) 180f else 0f, label = ""
     )
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxSize()
     ) {
         Text(
             modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 8.dp)
                 .weight(6f),
             text = title,
+            fontSize = 16.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
