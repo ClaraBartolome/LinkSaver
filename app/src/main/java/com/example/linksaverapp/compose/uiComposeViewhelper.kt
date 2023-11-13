@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.compose.compose.TAG
+import com.example.linksaverapp.db.Model.FolderList
 import com.example.linksaverapp.db.Model.LinkModel
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -72,6 +73,28 @@ private fun getDate(): String {
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
     return formatter.format(time)
+}
+
+fun createFolderList(links: List<LinkModel>?): HashMap<String, MutableList<LinkModel>>{
+    val hashMap = hashMapOf<String, MutableList<LinkModel>>()
+    links?.let{list ->
+        list.forEach { linkModel->
+            linkModel.folder?.let {folderName ->
+                if(hashMap.containsKey(folderName)){
+                    hashMap[folderName]?.add(linkModel)
+                }else{
+                    hashMap[folderName] = mutableListOf(linkModel)
+                }
+            } ?: run {
+                if(hashMap.containsKey("") || hashMap.containsKey(" ")){
+                    hashMap[""]?.add(linkModel)
+                }else{
+                    hashMap[""] = mutableListOf(linkModel)
+                }
+            }
+        }
+    }
+    return hashMap
 }
 
 @Composable

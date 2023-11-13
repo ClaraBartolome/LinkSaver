@@ -18,7 +18,9 @@ import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.LinkScreens
 import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.GetAllLinksByName
+import com.example.linksaverapp.compose.createFolderList
 import com.example.linksaverapp.compose.insertLink
+import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -35,22 +37,21 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val folderText = remember { mutableStateOf("") }
     val isProtected = remember { mutableStateOf(false) }
     val linkModelIsValid = remember { mutableStateOf(true) }
-    val foldersName = remember {mutableListOf<String>()}
-    foldersName.addAll(listOf("Favoritos", "Pistacho", "Fresa", "Mayonesa", "Elefante", "Privado"))
+    val foldersName = remember { mutableListOf<String>() }
 
     //Bottomsheet
     val isSheetOpen = remember { mutableStateOf(false) }
     val isAlertOpen = remember { mutableStateOf(false) }
-    
+
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
-        color =  MaterialTheme.colors.primary
+        color = MaterialTheme.colors.primary
     )
 
     Scaffold(
         topBar = {
             TopAppBarConfig(navController = navController, screen, linkModelIsValid, isAlertOpen) {
-                //TODO capar carpeta NONE
+                //TODO capar carpeta vacia
                 insertLink(
                     linkSaverViewModel = linkSaverViewModel,
                     name = nameText,
@@ -75,7 +76,12 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 folderText.value = ""
                 isProtected.value = false
                 linkModelIsValid.value = true
-                ScrollContent(allLinks = links, isSheetOpen) { link ->
+                StartScreen(
+                    allLinks = links,
+                    createHashMap = { createFolderList(linkSaverViewModel.allLinks.value) },
+                    openBottomSheet = isSheetOpen
+                )
+                { link ->
                     DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
                     GetAllLinksByName(linkSaverViewModel = linkSaverViewModel)
                 }
@@ -88,28 +94,30 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     folderText,
                     isProtected,
                     linkModelIsValid,
-                    foldersName)
+                    foldersName
+                )
             }
             composable(route = LinkScreens.Settings.name) {
                 screen = LinkScreens.Settings
                 Settings()
             }
         }
-        if(isAlertOpen.value){
+        if (isAlertOpen.value) {
             AlertDialog(
                 onDismissRequest = {
-                                   isAlertOpen.value = false
-                                   },
+                    isAlertOpen.value = false
+                },
                 onConfirmation = {
                     isAlertOpen.value = false
                     navController.popBackStack()
-                                 },
+                },
                 dialogTitle = "No has guardado los cambios",
                 dialogText = "¿Estás seguro de que quieres salir?"
             )
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
