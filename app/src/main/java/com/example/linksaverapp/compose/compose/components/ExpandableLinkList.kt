@@ -36,7 +36,7 @@ fun ExpandableLinkList(
         if (expandedState.value) {
             item {
                 folderList.forEach {
-                    LinkCard(it.name, onLinkLongPressed = {onLinklongPressed.invoke(it)}, onClickLink = {onLinkClick(it.link)})
+                    LinkCard(it.name, it.link, onLinkLongPressed = {onLinklongPressed.invoke(it)}, onClickLink = {onLinkClick(it.link)})
                 }
             }
         }

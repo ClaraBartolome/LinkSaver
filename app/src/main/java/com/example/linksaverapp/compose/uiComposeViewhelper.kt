@@ -100,6 +100,15 @@ fun SortTree(option: SortRadioOptions, linkSaverViewModel: LinkSaverViewModel){
 }
 
 
+fun shareLink(context:Context, name: String, link: String){
+    val sendIntent = Intent(
+        Intent.ACTION_SEND
+    )
+        .setType("text/plain")
+    sendIntent.putExtra(Intent.EXTRA_TEXT,name + "\n\n" + link)
+    context.startActivity(Intent.createChooser(sendIntent, "Share using:"))
+}
+
 fun openLink(context:Context, url: String){
     val urlIntent = Intent(
         Intent.ACTION_VIEW,

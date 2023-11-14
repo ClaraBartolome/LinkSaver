@@ -23,6 +23,7 @@ import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.SortTree
 import com.example.linksaverapp.compose.insertLink
 import com.example.linksaverapp.compose.openLink
+import com.example.linksaverapp.compose.shareLink
 import com.example.linksaverapp.compose.sortFolderList
 import com.example.linksaverapp.compose.sortedLinkList
 import com.example.linksaverapp.db.Model.LinkModel
@@ -121,6 +122,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                             linkSaverViewModel = linkSaverViewModel
                         )
                     },
+                    onShareLink = {name, link -> shareLink(ctx, name, link) },
                     onClickAction = { url -> openLink(ctx, url) }
                 )
             }

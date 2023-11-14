@@ -28,6 +28,7 @@ fun StartScreen(
     folderMap: MutableMap<String, MutableList<LinkModel>>,
     openBottomSheet: MutableState<Boolean>,
     onDeleteLink: @Composable() (LinkModel) -> Unit,
+    onShareLink: (String, String) -> Unit,
     onClickAction: (String) -> Unit
 ) {
     val linkId = remember { mutableStateOf(0) }
@@ -58,7 +59,7 @@ fun StartScreen(
                 folderMap[""]?.let { list ->
                     LazyColumn() {
                         items(list) {
-                            LinkCard(it.name, onLinkLongPressed = {
+                            LinkCard(it.name, it.link, onLinkLongPressed = {
                                 openBottomSheet.value = true
                                 linkId.value = it.id
                                 linkName.value = it.name
@@ -92,15 +93,19 @@ fun StartScreen(
                         linkProtected.value
                     )
                 )
+            },
+            onShareLink = {
+                onShareLink.invoke(linkName.value, linkText.value)
             })
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LinkActionsSheet(
     onDismissSheet: () -> Unit,
-    onDeleteLink: @Composable() () -> Unit
+    onDeleteLink: @Composable() () -> Unit,
+    onShareLink: () -> Unit
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
@@ -115,10 +120,11 @@ private fun LinkActionsSheet(
 
     ) {
         // Sheet content
-        BottomBarConfig {
+        BottomBarConfig(onDeleteLink = {
             onDeleteLink.invoke()
             onDismissSheet.invoke()
-        }
+        },
+            onShareLink = {onShareLink.invoke()})
         Spacer(Modifier.height(64.dp))
     }
 }
