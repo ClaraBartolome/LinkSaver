@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.SortRadioOptions
 import com.example.linksaverapp.compose.compose.TAG
@@ -17,7 +16,6 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.TreeMap
 
 
 //PODRIA HACER UNA CONFIGURACION PARA MOSTRAR POR DEFECTO EL HOST O EL PATH
@@ -99,16 +97,29 @@ fun sortFolderList(links: List<LinkModel>?, folderList: MutableMap<String, Mutab
             }
         }
         folderList[lastName] = mutableListAux.toMutableList()
-        folderList.values.forEach { list ->
-            list.sortBy { it.name }
-        }
     }
 }
 
-fun sortTree(option: SortRadioOptions){
+@Composable
+fun SortTree(option: SortRadioOptions, linkSaverViewModel: LinkSaverViewModel){
     when(option){
-        SortRadioOptions.NameAZ -> {}
-        else -> {}
+        SortRadioOptions.NameAZ -> {
+            GetAllLinksByNameAsc(linkSaverViewModel = linkSaverViewModel)}
+        SortRadioOptions.NameZA -> {
+            GetAllLinksByNameDesc(linkSaverViewModel = linkSaverViewModel)
+        }
+        SortRadioOptions.CreationDateNewFirst -> {
+            GetAllLinksByDateOfCreationAsc(linkSaverViewModel = linkSaverViewModel)
+        }
+        SortRadioOptions.CreationDateOldFirst -> {
+            GetAllLinksByDateOfCreationDesc(linkSaverViewModel = linkSaverViewModel)
+        }
+        SortRadioOptions.ModDateNewFirst -> {
+            GetAllLinksByDateOfModifiedAsc(linkSaverViewModel = linkSaverViewModel)
+        }
+        SortRadioOptions.ModDateOldFirst -> {
+            GetAllLinksByDateOfModifiedDesc(linkSaverViewModel = linkSaverViewModel)
+        }
     }
 }
 
@@ -121,13 +132,56 @@ fun openLink(context:Context, url: String){
     context.startActivity(urlIntent)
 }
 
+//region ORDER
 @Composable
-fun GetAllLinksByName(linkSaverViewModel: LinkSaverViewModel) {
+private fun GetAllLinksByNameAsc(linkSaverViewModel: LinkSaverViewModel) {
     LaunchedEffect(Unit) {
-        linkSaverViewModel.getAllLinksByName()
+        linkSaverViewModel.getAllLinksByNameAsc()
         Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
     }
 }
+
+@Composable
+private fun GetAllLinksByNameDesc(linkSaverViewModel: LinkSaverViewModel) {
+    LaunchedEffect(Unit) {
+        linkSaverViewModel.getAllLinksByNameDesc()
+        Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
+    }
+}
+
+@Composable
+private fun GetAllLinksByDateOfCreationAsc(linkSaverViewModel: LinkSaverViewModel) {
+    LaunchedEffect(Unit) {
+        linkSaverViewModel.getAllLinksByDateOfCreationAsc()
+        Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
+    }
+}
+
+@Composable
+private fun GetAllLinksByDateOfCreationDesc(linkSaverViewModel: LinkSaverViewModel) {
+    LaunchedEffect(Unit) {
+        linkSaverViewModel.getAllLinksByDateOfCreationDesc()
+        Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
+    }
+}
+
+@Composable
+private fun GetAllLinksByDateOfModifiedAsc(linkSaverViewModel: LinkSaverViewModel) {
+    LaunchedEffect(Unit) {
+        linkSaverViewModel.getAllLinksByDateOfModifiedAsc()
+        Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
+    }
+}
+
+@Composable
+private fun GetAllLinksByDateOfModifiedDesc(linkSaverViewModel: LinkSaverViewModel) {
+    LaunchedEffect(Unit) {
+        linkSaverViewModel.getAllLinksByDateOfModifiedDesc()
+        Log.i(TAG, "DB created size: ${linkSaverViewModel.allLinks.value?.size}")
+    }
+}
+
+//endregion
 
 @Composable
 fun DeleteLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel) {

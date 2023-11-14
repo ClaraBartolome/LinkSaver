@@ -14,7 +14,7 @@ class LinkSaverViewModel(private val repository: LinkRepository) : ViewModel() {
 
     fun insert(link:LinkModel)= viewModelScope.launch{
         repository.insert(link)
-        getAllLinksByName()
+        getAllLinksByNameAsc()
     }
 
     fun deleteLink(link:LinkModel)= viewModelScope.launch{
@@ -25,16 +25,28 @@ class LinkSaverViewModel(private val repository: LinkRepository) : ViewModel() {
         repository.updateLink(link)
     }
 
-    fun getAllLinksByName() = viewModelScope.launch{
-        repository.getAllLinksByName()
+    fun getAllLinksByNameAsc() = viewModelScope.launch{
+        repository.getAllLinksByNameAsc()
     }
 
-    fun getAllLinksByDateOfCreation() = viewModelScope.launch{
-        repository.getAllLinksByDateOfCreation()
+    fun getAllLinksByNameDesc() = viewModelScope.launch{
+        repository.getAllLinksByNameDesc()
     }
 
-    fun getAllLinksByDateOfModified() = viewModelScope.launch{
-        repository.getAllLinksByDateOfModified()
+    fun getAllLinksByDateOfCreationAsc() = viewModelScope.launch{
+        repository.getAllLinksByDateOfCreationAsc()
+    }
+
+    fun getAllLinksByDateOfCreationDesc() = viewModelScope.launch{
+        repository.getAllLinksByDateOfCreationDesc()
+    }
+
+    fun getAllLinksByDateOfModifiedAsc() = viewModelScope.launch{
+        repository.getAllLinksByDateOfModifiedAsc()
+    }
+
+    fun getAllLinksByDateOfModifiedDesc() = viewModelScope.launch{
+        repository.getAllLinksByDateOfModifiedDesc()
     }
 
 }

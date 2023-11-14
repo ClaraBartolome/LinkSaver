@@ -21,20 +21,38 @@ class LinkRepository (private val linkSaverDao: LinkSaverDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun getAllLinksByName() {
-        _allLinks.postValue(linkSaverDao.getAllOrderedByName())
+    suspend fun getAllLinksByNameAsc() {
+        _allLinks.postValue(linkSaverDao.getAllOrderedByNameAsc())
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun getAllLinksByDateOfCreation() {
-        _allLinks.postValue(linkSaverDao.getAllOrderedByDateOfCreation())
+    suspend fun getAllLinksByNameDesc() {
+        _allLinks.postValue(linkSaverDao.getAllOrderedByNameDesc())
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun getAllLinksByDateOfModified() {
-        _allLinks.postValue(linkSaverDao.getAllOrderedByDateOfModified())
+    suspend fun getAllLinksByDateOfCreationAsc() {
+        _allLinks.postValue(linkSaverDao.getAllOrderedByDateOfCreationAsc())
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getAllLinksByDateOfCreationDesc() {
+        _allLinks.postValue(linkSaverDao.getAllOrderedByDateOfCreationDesc())
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getAllLinksByDateOfModifiedAsc() {
+        _allLinks.postValue(linkSaverDao.getAllOrderedByDateOfModifiedAsc())
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getAllLinksByDateOfModifiedDesc() {
+        _allLinks.postValue(linkSaverDao.getAllOrderedByDateOfModifiedDesc())
     }
 
     //endregion

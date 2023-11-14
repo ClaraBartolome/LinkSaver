@@ -14,6 +14,7 @@ import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import androidx.compose.runtime.mutableStateOf
@@ -27,8 +28,7 @@ import com.example.linksaverapp.Utils.radioOptions
 import com.example.linksaverapp.ui.theme.mediumGreen
 
 @Composable
-fun SortScreen(radioOptions: List<SortRadioOptions>, onOptionSelected: (SortRadioOptions) -> Unit) {
-    val (selectedOption) = remember { mutableStateOf(radioOptions[0]) }
+fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: List<SortRadioOptions>, onOptionSelected: (SortRadioOptions) -> Unit) {
 // Note that Modifier.selectableGroup() is essential to ensure correct accessibility behavior
     Column(Modifier.selectableGroup()) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -43,15 +43,15 @@ fun SortScreen(radioOptions: List<SortRadioOptions>, onOptionSelected: (SortRadi
                     .fillMaxWidth()
                     .height(56.dp)
                     .selectable(
-                        selected = (option == selectedOption),
-                        onClick = { onOptionSelected(option) },
+                        selected = (option == selectedOption.value),
+                        onClick = { selectedOption.value = option },
                         role = Role.RadioButton
                     )
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = (option == selectedOption),
+                    selected = (option == selectedOption.value),
                     onClick = null, // null recommended for accessibility with screenreaders
                     colors = RadioButtonDefaults.colors(
                         selectedColor = mediumGreen,
@@ -64,13 +64,5 @@ fun SortScreen(radioOptions: List<SortRadioOptions>, onOptionSelected: (SortRadi
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun DefaultExpandableListPreview() {
-    LinkSaverAppTheme {
-        SortScreen(radioOptions){}
     }
 }

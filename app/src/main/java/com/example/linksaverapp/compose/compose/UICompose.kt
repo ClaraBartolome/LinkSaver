@@ -4,18 +4,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,10 +20,10 @@ import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.LinkScreens
 import com.example.linksaverapp.Utils.radioOptions
 import com.example.linksaverapp.compose.DeleteLink
-import com.example.linksaverapp.compose.GetAllLinksByName
 import com.example.linksaverapp.compose.sortFolderList
 import com.example.linksaverapp.compose.insertLink
 import com.example.linksaverapp.compose.openLink
+import com.example.linksaverapp.compose.SortTree
 import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -44,7 +40,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
 
     val linkList = remember { mutableStateMapOf<String, MutableList<LinkModel>>() }
 
-    GetAllLinksByName(linkSaverViewModel = linkSaverViewModel)
+
     val linksObserver = Observer<List<LinkModel>>{
         sortFolderList(it, linkList)
     }
@@ -59,6 +55,9 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     //Bottomsheet
     val isSheetOpen = remember { mutableStateOf(false) }
     val isAlertOpen = remember { mutableStateOf(false) }
+
+    //Order
+    val selectedOption = remember { mutableStateOf(radioOptions[0]) }
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
@@ -79,7 +78,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     isProtected = isProtected,
                     linkModelIsValid = linkModelIsValid
                 )
-                run { linkSaverViewModel.getAllLinksByName() }
+                //run { linkSaverViewModel.getAllLinksByNameAsc() }
             }
         }
     ) { innerPadding ->
@@ -89,6 +88,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = LinkScreens.Start.name) {
+                SortTree(option = selectedOption.value, linkSaverViewModel = linkSaverViewModel)
                 screen.value = LinkScreens.Start
                 linkText.value = ""
                 nameText.value = ""
@@ -101,7 +101,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     openBottomSheet = isSheetOpen,
                     onDeleteLink = { link ->
                         DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
-                        GetAllLinksByName(linkSaverViewModel = linkSaverViewModel)
+                        SortTree(option = selectedOption.value, linkSaverViewModel = linkSaverViewModel)
                     },
                     onClickAction = {url -> openLink(ctx, url) }
                 )
@@ -119,7 +119,9 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             }
             composable(route = LinkScreens.SortingConfig.name) {
                 screen.value = LinkScreens.SortingConfig
-                SortScreen(radioOptions){}
+                SortScreen(selectedOption, radioOptions){ option->
+
+                }
             }
             composable(route = LinkScreens.Settings.name) {
                 screen.value = LinkScreens.Settings

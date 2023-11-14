@@ -31,12 +31,20 @@ interface LinkSaverDao {
     fun getAll(): List<LinkModel>
 
     @Query("SELECT * FROM link_table ORDER BY name ASC")
-    suspend fun getAllOrderedByName(): List<LinkModel>
+    suspend fun getAllOrderedByNameAsc(): List<LinkModel>
+
+    @Query("SELECT * FROM link_table ORDER BY name DESC")
+    suspend fun getAllOrderedByNameDesc(): List<LinkModel>
 
     @Query("SELECT * FROM link_table ORDER BY dateOfCreation ASC")
-    fun getAllOrderedByDateOfCreation(): List<LinkModel>
+    suspend fun getAllOrderedByDateOfCreationAsc(): List<LinkModel>
+
+    @Query("SELECT * FROM link_table ORDER BY dateOfCreation DESC")
+    suspend fun getAllOrderedByDateOfCreationDesc(): List<LinkModel>
 
     @Query("SELECT * FROM link_table ORDER BY dateOfModified ASC")
-    fun getAllOrderedByDateOfModified(): List<LinkModel>
+    suspend fun getAllOrderedByDateOfModifiedAsc(): List<LinkModel>
 
+    @Query("SELECT * FROM link_table ORDER BY dateOfModified DESC")
+    suspend fun getAllOrderedByDateOfModifiedDesc(): List<LinkModel>
 }
