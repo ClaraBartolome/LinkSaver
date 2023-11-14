@@ -14,6 +14,7 @@ class LinkSaverViewModel(private val repository: LinkRepository) : ViewModel() {
 
     fun insert(link:LinkModel)= viewModelScope.launch{
         repository.insert(link)
+        getAllLinksByName()
     }
 
     fun deleteLink(link:LinkModel)= viewModelScope.launch{

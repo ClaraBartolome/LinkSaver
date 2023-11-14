@@ -18,14 +18,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.compose.components.ExpandableLinkList
 import com.example.linksaverapp.compose.compose.components.LinkCard
 import com.example.linksaverapp.db.Model.LinkModel
+import java.util.TreeMap
 
 @Composable
 fun StartScreen(
     allLinks: State<List<LinkModel>?>,
-    createHashMap: () -> HashMap<String, MutableList<LinkModel>>,
+    folderMap: MutableMap<String, MutableList<LinkModel>>,
     openBottomSheet: MutableState<Boolean>,
     onDeleteLink: @Composable() (LinkModel) -> Unit,
     onClickAction: (String) -> Unit
@@ -38,21 +40,8 @@ fun StartScreen(
     val linkFolder = remember { mutableStateOf<String?>(null) }
     val linkProtected = remember { mutableStateOf(0) }
     allLinks.value?.let {
-        /*items(it) {
-            LinkCard(it.name) {
-                openBottomSheet.value = true
-                linkId.value = it.id
-                linkName.value = it.name
-                linkText.value = it.link
-                linkDateOg.value = it.dateOfCreation
-                linkDateMod.value = it.dateOfModified
-                linkFolder.value = it.folder
-                linkProtected.value = it.isProtected
-            }
-        }*/
         Column {
-            val folderList = createHashMap.invoke()
-            for ((key, value) in folderList) {
+            for ((key, value) in folderMap) {
                 ExpandableLinkList(folderName = key, folderList = value, onLinklongPressed = {
                     openBottomSheet.value = true
                     it?.let {
@@ -67,8 +56,8 @@ fun StartScreen(
                 }, onLinkClick = { url -> onClickAction.invoke(url) })
 
             }
-            if (folderList.containsKey("") && folderList[""] != null) {
-                folderList[""]?.let { list ->
+            if (folderMap.containsKey("") && folderMap[""] != null) {
+                folderMap[""]?.let { list ->
                     LazyColumn() {
                         items(list) {
                             LinkCard(it.name, onLinkLongPressed = {
@@ -128,7 +117,10 @@ private fun LinkActionsSheet(
 
     ) {
         // Sheet content
-        BottomBarConfig(onDeleteLink)
+        BottomBarConfig {
+            onDeleteLink.invoke()
+            onDismissSheet.invoke()
+        }
         Spacer(Modifier.height(64.dp))
     }
 }

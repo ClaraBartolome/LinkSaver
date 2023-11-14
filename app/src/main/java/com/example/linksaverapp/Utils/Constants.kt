@@ -4,10 +4,11 @@ enum class LinkScreens(){
     Start,
     Add,
     Settings,
+    SortingConfig,
     Edit
 }
 
-enum class BottomBarOption{
+enum class BottomBarOption(){
     AddFolder,
     AddFavorite,
     Share,
@@ -15,6 +16,24 @@ enum class BottomBarOption{
     Delete,
     None
 }
+
+enum class SortRadioOptions(val text: String){
+    NameAZ("Nombre (A-Z)"),
+    NameZA("Nombre (Z-A)"),
+    CreationDateNewFirst("Fecha de creación (Más recientes primero"),
+    CreationDateOldFirst("Fecha de creación (Más antiguos primero"),
+    ModDateNewFirst("Fecha de modificacion (Más recientes primero"),
+    ModDateOldFirst("Fecha de modificación (Más antiguos primero"),
+}
+
+val radioOptions = listOf(
+    SortRadioOptions.NameAZ,
+    SortRadioOptions.NameZA,
+    SortRadioOptions.CreationDateNewFirst,
+    SortRadioOptions.CreationDateOldFirst,
+    SortRadioOptions.ModDateNewFirst,
+    SortRadioOptions.ModDateOldFirst,
+)
 
 //region Text
     val shortText = "Lorem ipsum dolor sit amet"

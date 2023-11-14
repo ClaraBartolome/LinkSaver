@@ -33,7 +33,11 @@ fun TopAppBarConfig(
                         iconId = R.drawable.ic_settings,
                         action = { navController.navigate(LinkScreens.Settings.name) })
                 }
-
+                LinkScreens.Settings, LinkScreens.SortingConfig -> {
+                    IconButtonApp(
+                        iconId = R.drawable.ic_arrow_back,
+                        action = { navController.popBackStack() })
+                }
                 else -> {
                     IconButtonApp(iconId = R.drawable.ic_arrow_back, action = {
                         if (screen == LinkScreens.Add) {
@@ -47,7 +51,7 @@ fun TopAppBarConfig(
             when (screen) {
                 LinkScreens.Start -> {
                     IconButtonApp(iconId = R.drawable.ic_search, action = { searchLink(context) })
-                    IconButtonApp(iconId = R.drawable.ic_order, action = { sortLinks(context) })
+                    IconButtonApp(iconId = R.drawable.ic_order, action = { navController.navigate(LinkScreens.SortingConfig.name) })
                     IconButtonApp(
                         iconId = R.drawable.ic_add,
                         action = { navController.navigate(LinkScreens.Add.name) })

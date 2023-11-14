@@ -8,13 +8,16 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import com.example.linksaverapp.LinkSaverViewModel
+import com.example.linksaverapp.Utils.SortRadioOptions
 import com.example.linksaverapp.compose.compose.TAG
 import com.example.linksaverapp.db.Model.LinkModel
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.TreeMap
 
 
 //PODRIA HACER UNA CONFIGURACION PARA MOSTRAR POR DEFECTO EL HOST O EL PATH
@@ -47,6 +50,7 @@ private fun validateLinkModel(name: String, link: String): Boolean {
     return name.isNotBlank() && link.isNotBlank()
 }
 
+
 fun insertLink(
     linkSaverViewModel: LinkSaverViewModel,
     name: MutableState<String>,
@@ -76,26 +80,36 @@ private fun getDate(): String {
     return formatter.format(time)
 }
 
-fun createFolderList(links: List<LinkModel>?): HashMap<String, MutableList<LinkModel>>{
-    val hashMap = hashMapOf<String, MutableList<LinkModel>>()
-    links?.let{list ->
-        list.forEach { linkModel->
-            linkModel.folder?.let {folderName ->
-                if(hashMap.containsKey(folderName)){
-                    hashMap[folderName]?.add(linkModel)
-                }else{
-                    hashMap[folderName] = mutableListOf(linkModel)
-                }
-            } ?: run {
-                if(hashMap.containsKey("") || hashMap.containsKey(" ")){
-                    hashMap[""]?.add(linkModel)
-                }else{
-                    hashMap[""] = mutableListOf(linkModel)
+fun sortFolderList(links: List<LinkModel>?, folderList: MutableMap<String, MutableList<LinkModel>>) {
+    folderList.clear()
+    links?.let { list ->
+        var lastName = list.first().folder ?: ""
+        val mutableListAux = mutableListOf<LinkModel>()
+        list.sortedBy { it.folder }.forEach { linkModel ->
+            linkModel.folder?.let { folderName ->
+                Log.i("DEBUG", "Entrada: " + linkModel.name)
+                if (lastName != folderName) {
+                    folderList[lastName] = mutableListAux.toMutableList()
+                    lastName = folderName
+                    mutableListAux.clear()
+                    mutableListAux.add(linkModel)
+                } else {
+                    mutableListAux.add(linkModel)
                 }
             }
         }
+        folderList[lastName] = mutableListAux.toMutableList()
+        folderList.values.forEach { list ->
+            list.sortBy { it.name }
+        }
     }
-    return hashMap
+}
+
+fun sortTree(option: SortRadioOptions){
+    when(option){
+        SortRadioOptions.NameAZ -> {}
+        else -> {}
+    }
 }
 
 
