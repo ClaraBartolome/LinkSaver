@@ -48,30 +48,6 @@ private fun validateLinkModel(name: String, link: String): Boolean {
     return name.isNotBlank() && link.isNotBlank()
 }
 
-
-fun insertLink(
-    linkSaverViewModel: LinkSaverViewModel,
-    name: MutableState<String>,
-    link: MutableState<String>,
-    folder: MutableState<String>,
-    isProtected: MutableState<Boolean>,
-    linkModelIsValid: MutableState<Boolean>
-) {
-    linkModelIsValid.value = validateLinkModel(name.value, link.value)
-    if (linkModelIsValid.value) {
-        linkSaverViewModel.insert(
-            LinkModel(
-                name = name.value,
-                link = link.value,
-                dateOfCreation = getDate(),
-                dateOfModified = getDate(),
-                folder = folder.value,
-                isProtected = if (isProtected.value) 1 else 0,
-            )
-        )
-    }
-}
-
 private fun getDate(): String {
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -132,6 +108,16 @@ fun openLink(context:Context, url: String){
     context.startActivity(urlIntent)
 }
 
+fun sortedLinkList(links: List<LinkModel>?, searchText: String): List<LinkModel>{
+    links?.let{
+        return it.filter { linkModel ->
+            linkModel.name.lowercase().contains(searchText.lowercase())
+        }.sortedBy { it.name }
+    } ?: run {
+        return listOf<LinkModel>()
+    }
+}
+
 //region ORDER
 @Composable
 private fun GetAllLinksByNameAsc(linkSaverViewModel: LinkSaverViewModel) {
@@ -182,6 +168,31 @@ private fun GetAllLinksByDateOfModifiedDesc(linkSaverViewModel: LinkSaverViewMod
 }
 
 //endregion
+
+
+
+fun insertLink(
+    linkSaverViewModel: LinkSaverViewModel,
+    name: MutableState<String>,
+    link: MutableState<String>,
+    folder: MutableState<String>,
+    isProtected: MutableState<Boolean>,
+    linkModelIsValid: MutableState<Boolean>
+) {
+    linkModelIsValid.value = validateLinkModel(name.value, link.value)
+    if (linkModelIsValid.value) {
+        linkSaverViewModel.insert(
+            LinkModel(
+                name = name.value,
+                link = link.value,
+                dateOfCreation = getDate(),
+                dateOfModified = getDate(),
+                folder = folder.value,
+                isProtected = if (isProtected.value) 1 else 0,
+            )
+        )
+    }
+}
 
 @Composable
 fun DeleteLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel) {

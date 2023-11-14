@@ -18,11 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.compose.components.ExpandableLinkList
 import com.example.linksaverapp.compose.compose.components.LinkCard
 import com.example.linksaverapp.db.Model.LinkModel
-import java.util.TreeMap
 
 @Composable
 fun StartScreen(

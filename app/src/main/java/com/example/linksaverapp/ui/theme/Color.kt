@@ -12,3 +12,6 @@ val lightGreen = Color(0x4A90E200)
 val mediumGreen = Color(0xFF4CAF50)
 val darkGreen = Color(0xFF009688)
 val yellow = Color(0xFFFFC107)
+
+val whiteAlfaMedium = Color(0x80FFFFFF)
+val whiteAlfaLow = Color(0x40FFFFFF)

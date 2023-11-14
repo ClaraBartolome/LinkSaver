@@ -7,23 +7,59 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import com.example.linksaverapp.R
 import com.example.linksaverapp.Utils.LinkScreens
-import com.example.linksaverapp.compose.searchLink
-import com.example.linksaverapp.compose.sortLinks
+import com.example.linksaverapp.compose.compose.components.SearchBar
+import com.example.linksaverapp.db.Model.LinkModel
+
 
 @Composable
-fun TopAppBarConfig(
+fun TopAppBar(
+    isSearchOpen: MutableState<Boolean>,
     navController: NavHostController,
     screen: LinkScreens,
     isLinkModelValid: MutableState<Boolean>,
     isAlertOpen: MutableState<Boolean>,
+    insertLinkAction: () -> Unit,
+    searchText: MutableState<String>,
+    onTextChange: (String) -> Unit,
+    onSearchInit: () -> List<LinkModel>,
+    onClickOnSearched: (String) -> Unit,
+    onCloseClicked: () -> Unit
+) {
+    if (isSearchOpen.value) {
+        SearchBar(
+            text = searchText,
+            onTextChange = onTextChange,
+            onSearchInit = onSearchInit,
+            onClickOnSearched = onClickOnSearched,
+            onCloseClicked = onCloseClicked
+        )
+    } else {
+        TopAppBarDefault(
+            navController = navController,
+            screen = screen,
+            isLinkModelValid = isLinkModelValid,
+            isSearchOpen = isSearchOpen,
+            isAlertOpen = isAlertOpen,
+            addLinkAction = insertLinkAction
+        )
+        //TODO capar carpeta vacia
+        //run { linkSaverViewModel.getAllLinksByNameAsc() }
+    }
+}
+
+@Composable
+fun TopAppBarDefault(
+    navController: NavHostController,
+    screen: LinkScreens,
+    isLinkModelValid: MutableState<Boolean>,
+    isSearchOpen: MutableState<Boolean>,
+    isAlertOpen: MutableState<Boolean>,
     addLinkAction: () -> Unit
 ) {
-    val context = LocalContext.current
     TopAppBar(
         title = { TitleText(screen) },
         navigationIcon = {
@@ -33,11 +69,13 @@ fun TopAppBarConfig(
                         iconId = R.drawable.ic_settings,
                         action = { navController.navigate(LinkScreens.Settings.name) })
                 }
+
                 LinkScreens.Settings, LinkScreens.SortingConfig -> {
                     IconButtonApp(
                         iconId = R.drawable.ic_arrow_back,
                         action = { navController.popBackStack() })
                 }
+
                 else -> {
                     IconButtonApp(iconId = R.drawable.ic_arrow_back, action = {
                         if (screen == LinkScreens.Add) {
@@ -50,8 +88,12 @@ fun TopAppBarConfig(
         actions = {
             when (screen) {
                 LinkScreens.Start -> {
-                    IconButtonApp(iconId = R.drawable.ic_search, action = { searchLink(context) })
-                    IconButtonApp(iconId = R.drawable.ic_order, action = { navController.navigate(LinkScreens.SortingConfig.name) })
+                    IconButtonApp(
+                        iconId = R.drawable.ic_search,
+                        action = { isSearchOpen.value = true })
+                    IconButtonApp(
+                        iconId = R.drawable.ic_order,
+                        action = { navController.navigate(LinkScreens.SortingConfig.name) })
                     IconButtonApp(
                         iconId = R.drawable.ic_add,
                         action = { navController.navigate(LinkScreens.Add.name) })
@@ -60,7 +102,10 @@ fun TopAppBarConfig(
                 LinkScreens.Add -> {
                     IconButtonApp(iconId = R.drawable.ic_check, action = {
                         addLinkAction.invoke()
-                        if (isLinkModelValid.value) {navController.popBackStack()}})
+                        if (isLinkModelValid.value) {
+                            navController.popBackStack()
+                        }
+                    })
                 }
 
                 LinkScreens.Settings -> {

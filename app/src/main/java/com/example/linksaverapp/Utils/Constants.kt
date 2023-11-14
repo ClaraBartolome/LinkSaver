@@ -17,6 +17,11 @@ enum class BottomBarOption(){
     None
 }
 
+enum class SearchWidgetState {
+    OPENED,
+    CLOSED
+}
+
 enum class SortRadioOptions(val text: String){
     NameAZ("Nombre (A-Z)"),
     NameZA("Nombre (Z-A)"),

@@ -20,10 +20,11 @@ import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.LinkScreens
 import com.example.linksaverapp.Utils.radioOptions
 import com.example.linksaverapp.compose.DeleteLink
-import com.example.linksaverapp.compose.sortFolderList
+import com.example.linksaverapp.compose.SortTree
 import com.example.linksaverapp.compose.insertLink
 import com.example.linksaverapp.compose.openLink
-import com.example.linksaverapp.compose.SortTree
+import com.example.linksaverapp.compose.sortFolderList
+import com.example.linksaverapp.compose.sortedLinkList
 import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -41,7 +42,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val linkList = remember { mutableStateMapOf<String, MutableList<LinkModel>>() }
 
 
-    val linksObserver = Observer<List<LinkModel>>{
+    val linksObserver = Observer<List<LinkModel>> {
         sortFolderList(it, linkList)
     }
     linkSaverViewModel.allLinks.observe(lifecycleOwner, linksObserver)
@@ -50,7 +51,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val nameText = remember { mutableStateOf("") }
     val folderText = remember { mutableStateOf("") }
     val isProtected = remember { mutableStateOf(false) }
-    val linkModelIsValid = remember { mutableStateOf(true) }
+    val isLinkModelValid = remember { mutableStateOf(true) }
 
     //Bottomsheet
     val isSheetOpen = remember { mutableStateOf(false) }
@@ -59,27 +60,41 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     //Order
     val selectedOption = remember { mutableStateOf(radioOptions[0]) }
 
+    //Search
+    val searchText = remember { mutableStateOf("") }
+    val isSearchOpen = remember { mutableStateOf(false) }
+
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colors.primary
     )
 
-
-
     Scaffold(
         topBar = {
-            TopAppBarConfig(navController = navController, screen.value, linkModelIsValid, isAlertOpen) {
-                //TODO capar carpeta vacia
-                insertLink(
-                    linkSaverViewModel = linkSaverViewModel,
-                    name = nameText,
-                    link = linkText,
-                    folder = folderText,
-                    isProtected = isProtected,
-                    linkModelIsValid = linkModelIsValid
-                )
-                //run { linkSaverViewModel.getAllLinksByNameAsc() }
-            }
+            TopAppBar(
+                isSearchOpen = isSearchOpen,
+                navController = navController,
+                screen = screen.value,
+                isLinkModelValid = isLinkModelValid,
+                isAlertOpen = isAlertOpen,
+                insertLinkAction = {
+                    //TODO capar carpeta vacia
+                    insertLink(
+                        linkSaverViewModel = linkSaverViewModel,
+                        name = nameText,
+                        link = linkText,
+                        folder = folderText,
+                        isProtected = isProtected,
+                        linkModelIsValid = isLinkModelValid
+                    )
+                    //run { linkSaverViewModel.getAllLinksByNameAsc() }
+                },
+                searchText = searchText,
+                onTextChange = {text -> searchText.value = text},
+                onClickOnSearched = { openLink(ctx, it) },
+                onSearchInit = { sortedLinkList(links.value, searchText.value) },
+                onCloseClicked = {isSearchOpen.value = false}
+            )
         }
     ) { innerPadding ->
         NavHost(
@@ -94,16 +109,19 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 nameText.value = ""
                 folderText.value = ""
                 isProtected.value = false
-                linkModelIsValid.value = true
+                isLinkModelValid.value = true
                 StartScreen(
                     allLinks = links,
                     folderMap = linkList,
                     openBottomSheet = isSheetOpen,
                     onDeleteLink = { link ->
                         DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
-                        SortTree(option = selectedOption.value, linkSaverViewModel = linkSaverViewModel)
+                        SortTree(
+                            option = selectedOption.value,
+                            linkSaverViewModel = linkSaverViewModel
+                        )
                     },
-                    onClickAction = {url -> openLink(ctx, url) }
+                    onClickAction = { url -> openLink(ctx, url) }
                 )
             }
             composable(route = LinkScreens.Add.name) {
@@ -113,13 +131,13 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     linkText,
                     folderText,
                     isProtected,
-                    linkModelIsValid,
+                    isLinkModelValid,
                     linkList.keys
                 )
             }
             composable(route = LinkScreens.SortingConfig.name) {
                 screen.value = LinkScreens.SortingConfig
-                SortScreen(selectedOption, radioOptions){ option->
+                SortScreen(selectedOption, radioOptions) { option ->
 
                 }
             }
