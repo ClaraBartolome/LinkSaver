@@ -1,6 +1,8 @@
 package com.example.linksaverapp.compose
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -8,7 +10,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.compose.compose.TAG
-import com.example.linksaverapp.db.Model.FolderList
 import com.example.linksaverapp.db.Model.LinkModel
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -95,6 +96,15 @@ fun createFolderList(links: List<LinkModel>?): HashMap<String, MutableList<LinkM
         }
     }
     return hashMap
+}
+
+
+fun openLink(context:Context, url: String){
+    val urlIntent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse(url)
+    )
+    context.startActivity(urlIntent)
 }
 
 @Composable

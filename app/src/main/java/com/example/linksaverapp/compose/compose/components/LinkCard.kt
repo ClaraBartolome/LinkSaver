@@ -19,14 +19,14 @@ import com.example.linksaverapp.ui.theme.lightGreen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LinkCard(title: String = "", linkPressed: ()-> Unit){
+fun LinkCard(title: String = "", onLinkLongPressed: ()-> Unit, onClickLink: ()-> Unit){
     Box(modifier = Modifier
         .padding(horizontal = 16.dp, vertical = 8.dp)
         .fillMaxSize()
         .background(lightGreen, RoundedCornerShape(10.dp))
         .combinedClickable(
-            onClick = {},
-            onLongClick = linkPressed
+            onClick = onClickLink,
+            onLongClick = onLinkLongPressed
         )
         ) {
         Text(
@@ -44,7 +44,7 @@ fun DefaultPreview() {
     LinkSaverAppTheme {
         LazyColumn() {
             items(5){
-                LinkCard(){}
+                LinkCard("", {}, {})
             }
         }
     }

@@ -25,9 +25,10 @@ import com.example.linksaverapp.db.Model.LinkModel
 @Composable
 fun StartScreen(
     allLinks: State<List<LinkModel>?>,
-    createHashMap: ()-> HashMap<String, MutableList<LinkModel>>,
+    createHashMap: () -> HashMap<String, MutableList<LinkModel>>,
     openBottomSheet: MutableState<Boolean>,
-    onDeleteLink: @Composable() (LinkModel) -> Unit
+    onDeleteLink: @Composable() (LinkModel) -> Unit,
+    onClickAction: (String) -> Unit
 ) {
     val linkId = remember { mutableStateOf(0) }
     val linkName = remember { mutableStateOf("") }
@@ -36,54 +37,55 @@ fun StartScreen(
     val linkDateMod = remember { mutableStateOf("") }
     val linkFolder = remember { mutableStateOf<String?>(null) }
     val linkProtected = remember { mutableStateOf(0) }
-        allLinks.value?.let {
-            /*items(it) {
-                LinkCard(it.name) {
+    allLinks.value?.let {
+        /*items(it) {
+            LinkCard(it.name) {
+                openBottomSheet.value = true
+                linkId.value = it.id
+                linkName.value = it.name
+                linkText.value = it.link
+                linkDateOg.value = it.dateOfCreation
+                linkDateMod.value = it.dateOfModified
+                linkFolder.value = it.folder
+                linkProtected.value = it.isProtected
+            }
+        }*/
+        Column {
+            val folderList = createHashMap.invoke()
+            for ((key, value) in folderList) {
+                ExpandableLinkList(folderName = key, folderList = value, onLinklongPressed = {
                     openBottomSheet.value = true
-                    linkId.value = it.id
-                    linkName.value = it.name
-                    linkText.value = it.link
-                    linkDateOg.value = it.dateOfCreation
-                    linkDateMod.value = it.dateOfModified
-                    linkFolder.value = it.folder
-                    linkProtected.value = it.isProtected
-                }
-            }*/
-            Column {
-                val folderList = createHashMap.invoke()
-                for ((key, value) in folderList) {
-                    ExpandableLinkList(folderName = key, folderList = value){
-                        openBottomSheet.value = true
-                        it?.let{
-                            linkId.value = it.id
-                            linkName.value = it.name
-                            linkText.value = it.link
-                            linkDateOg.value = it.dateOfCreation
-                            linkDateMod.value = it.dateOfModified
-                            linkFolder.value = it.folder
-                            linkProtected.value = it.isProtected
-                        }
-                        }
-                }
-                if(folderList.containsKey("") && folderList[""] != null){
-                    folderList[""]?.let{ list ->
-                        LazyColumn(){
-                            items(list){
-                                LinkCard(it.name) {
-                                    openBottomSheet.value = true
-                                    linkId.value = it.id
-                                    linkName.value = it.name
-                                    linkText.value = it.link
-                                    linkDateOg.value = it.dateOfCreation
-                                    linkDateMod.value = it.dateOfModified
-                                    linkFolder.value = it.folder
-                                    linkProtected.value = it.isProtected
-                                }
-                            }
+                    it?.let {
+                        linkId.value = it.id
+                        linkName.value = it.name
+                        linkText.value = it.link
+                        linkDateOg.value = it.dateOfCreation
+                        linkDateMod.value = it.dateOfModified
+                        linkFolder.value = it.folder
+                        linkProtected.value = it.isProtected
+                    }
+                }, onLinkClick = { url -> onClickAction.invoke(url) })
+
+            }
+            if (folderList.containsKey("") && folderList[""] != null) {
+                folderList[""]?.let { list ->
+                    LazyColumn() {
+                        items(list) {
+                            LinkCard(it.name, onLinkLongPressed = {
+                                openBottomSheet.value = true
+                                linkId.value = it.id
+                                linkName.value = it.name
+                                linkText.value = it.link
+                                linkDateOg.value = it.dateOfCreation
+                                linkDateMod.value = it.dateOfModified
+                                linkFolder.value = it.folder
+                                linkProtected.value = it.isProtected
+                            }, onClickLink = { onClickAction.invoke(it.link) })
                         }
                     }
                 }
             }
+        }
     }
 
     if (openBottomSheet.value) {

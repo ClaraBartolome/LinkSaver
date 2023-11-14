@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +21,7 @@ import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.GetAllLinksByName
 import com.example.linksaverapp.compose.createFolderList
 import com.example.linksaverapp.compose.insertLink
+import com.example.linksaverapp.compose.openLink
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -46,6 +48,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colors.primary
     )
+
+    val ctx = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -78,12 +82,14 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 StartScreen(
                     allLinks = links,
                     createHashMap = { createFolderList(linkSaverViewModel.allLinks.value) },
-                    openBottomSheet = isSheetOpen
+                    openBottomSheet = isSheetOpen,
+                    onDeleteLink = { link ->
+                        DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
+                        GetAllLinksByName(linkSaverViewModel = linkSaverViewModel)
+                    },
+                    onClickAction = {url -> openLink(ctx, url) }
                 )
-                { link ->
-                    DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
-                    GetAllLinksByName(linkSaverViewModel = linkSaverViewModel)
-                }
+
             }
             composable(route = LinkScreens.Add.name) {
                 screen = LinkScreens.Add
