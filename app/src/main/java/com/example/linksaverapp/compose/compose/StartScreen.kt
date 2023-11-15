@@ -42,23 +42,11 @@ fun StartScreen(
     val linkProtected = remember { mutableStateOf(0) }
     allLinks.value?.let {
         Column {
-            /*if(!folderMap.containsKey("Favoritos")){
-                ExpandableLinkList(folderName = "Favoritos", folderList = mutableListOf(), onLinklongPressed = {}, onLinkClick = { })
-            }else{
-                ExpandableLinkList(folderName = "Favoritos", folderList = folderMap["Favoritos"], onLinklongPressed = {
-                    openBottomSheet.value = true
-                    it?.let {
-                        linkId.value = it.id
-                        linkName.value = it.name
-                        linkText.value = it.link
-                        linkDateOg.value = it.dateOfCreation
-                        linkDateMod.value = it.dateOfModified
-                        linkFolder.value = it.folder
-                        linkProtected.value = it.isProtected
-                    }
-                }, onLinkClick = { url -> onClickAction.invoke(url) })
-            }*/
-            ExpandableLinkList(folderName = "Favoritos", folderList = folderMap["Favoritos"]?: mutableListOf(), FolderHeaderType.Favorite, onLinklongPressed = {
+            ExpandableLinkList(folderName = "Favoritos",
+                folderList = folderMap["Favoritos"]?: mutableListOf(),
+                FolderHeaderType.Favorite,
+                number = folderMap["Favoritos"]?.size ?: 0,
+                onLinklongPressed = {
                 openBottomSheet.value = true
                 it?.let {
                     linkId.value = it.id
@@ -71,7 +59,7 @@ fun StartScreen(
                 }
             }, onLinkClick = { url -> onClickAction.invoke(url) })
 
-            for ((key, value) in folderMap) {
+            for ((key, value) in folderMap.minus("Favoritos")) {
                 ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, onLinklongPressed = {
                     openBottomSheet.value = true
                     it?.let {

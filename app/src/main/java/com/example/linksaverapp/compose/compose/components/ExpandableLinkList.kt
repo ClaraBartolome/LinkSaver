@@ -19,6 +19,7 @@ fun ExpandableLinkList(
     folderName: String? = null,
     folderList: MutableList<LinkModel>,
     folderHeaderType: FolderHeaderType,
+    number: Int = 0,
     onLinklongPressed: (LinkModel?)-> Unit,
     onLinkClick: (String) -> Unit
 ) {
@@ -31,7 +32,7 @@ fun ExpandableLinkList(
     ){
         if(!folderName.isNullOrBlank()){
             item {
-                FolderHeader(title = folderName, expandedState = expandedState, folderHeaderType)
+                FolderHeader(title = folderName, expandedState = expandedState,  folderHeaderType, number)
             }
         }
         if (expandedState.value) {
@@ -54,7 +55,7 @@ fun DefaultExpandableListPreview() {
         ExpandableLinkList(folderName = "Favoritos",
             mutableListOf(
                 LinkModel(name= "Buzzfeed"),
-            ), FolderHeaderType.Favorite, {}, {}
+            ), FolderHeaderType.Favorite, 0,{}, {}
         )
     }
 }

@@ -21,6 +21,7 @@ fun TopAppBar(
     navController: NavHostController,
     screen: LinkScreens,
     isLinkModelValid: MutableState<Boolean>,
+    isFolderNameValid: MutableState<Boolean>,
     isAlertOpen: MutableState<Boolean>,
     insertLinkAction: () -> Unit,
     editLinkAction: () -> Unit,
@@ -43,6 +44,7 @@ fun TopAppBar(
             navController = navController,
             screen = screen,
             isLinkModelValid = isLinkModelValid,
+            isFolderNameValid = isFolderNameValid,
             isSearchOpen = isSearchOpen,
             isAlertOpen = isAlertOpen,
             addLinkAction = insertLinkAction,
@@ -58,6 +60,7 @@ fun TopAppBarDefault(
     navController: NavHostController,
     screen: LinkScreens,
     isLinkModelValid: MutableState<Boolean>,
+    isFolderNameValid: MutableState<Boolean>,
     isSearchOpen: MutableState<Boolean>,
     isAlertOpen: MutableState<Boolean>,
     addLinkAction: () -> Unit,
@@ -103,7 +106,7 @@ fun TopAppBarDefault(
                 LinkScreens.Add -> {
                     IconButtonApp(iconId = R.drawable.ic_check, action = {
                         addLinkAction.invoke()
-                        if (isLinkModelValid.value) {
+                        if (isLinkModelValid.value && isFolderNameValid.value) {
                             navController.popBackStack()
                         }
                     })
@@ -117,7 +120,7 @@ fun TopAppBarDefault(
                 LinkScreens.Edit -> {
                     IconButtonApp(iconId = R.drawable.ic_check, action = {
                         editLinkAction.invoke()
-                        if (isLinkModelValid.value) {
+                        if (isLinkModelValid.value && isFolderNameValid.value) {
                             navController.popBackStack()
                         }
                     })

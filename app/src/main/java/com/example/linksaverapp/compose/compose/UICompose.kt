@@ -56,6 +56,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val isProtected = remember { mutableStateOf(false) }
     val linkModel = remember { mutableStateOf(LinkModel()) }
     val isLinkModelValid = remember { mutableStateOf(true) }
+    val isFolderNameValid = remember { mutableStateOf(true) }
 
     //Bottomsheet
     val isSheetOpen = remember { mutableStateOf(false) }
@@ -80,6 +81,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 navController = navController,
                 screen = screen.value,
                 isLinkModelValid = isLinkModelValid,
+                isFolderNameValid = isFolderNameValid,
                 isAlertOpen = isAlertOpen,
                 insertLinkAction = {
                     if(folderText.value.isBlank()){
@@ -102,7 +104,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                         this.isProtected = if(isProtected.value) 1 else 0
                         dateOfModified = getDate()
                     }
-                    updateLink(linkSaverViewModel = linkSaverViewModel, link = linkModel.value)
+                    updateLink(linkSaverViewModel = linkSaverViewModel, link = linkModel.value, FolderNameIsValid = isFolderNameValid, folderMap = linkList)
                 },
                 searchText = searchText,
                 onTextChange = {text -> searchText.value = text},
@@ -156,6 +158,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     folderText,
                     isProtected,
                     isLinkModelValid,
+                    isFolderNameValid,
                     linkList.keys
                 )
             }
@@ -167,6 +170,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     folderText,
                     isProtected,
                     isLinkModelValid,
+                    isFolderNameValid,
                     linkList.keys
                 )
             }

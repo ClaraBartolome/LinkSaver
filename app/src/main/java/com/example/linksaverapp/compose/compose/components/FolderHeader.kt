@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.linksaverapp.R
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
+import com.example.linksaverapp.ui.theme.softPink
 
 @Composable
 fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: FolderHeaderType, number: Int = 0) {
@@ -47,7 +48,7 @@ fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: Fold
                 painter = painterResource(id = getIcon(type)),
                 contentDescription = "",
                 modifier = Modifier.padding(start = 8.dp),
-                colorFilter = ColorFilter.tint(color = getColor())
+                colorFilter = ColorFilter.tint(color = if(type == FolderHeaderType.Favorite) softPink else getColor())
             )
             Text(
                 modifier = Modifier

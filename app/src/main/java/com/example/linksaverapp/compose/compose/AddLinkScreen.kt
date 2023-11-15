@@ -8,8 +8,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -63,6 +65,7 @@ fun AddLinkScreen(
     folderName: MutableState<String>,
     isProtected: MutableState<Boolean>,
     linkModelValid: MutableState<Boolean>,
+    folderValid: MutableState<Boolean>,
     folderList: MutableSet<String>
 ) {
     Column(
@@ -101,14 +104,17 @@ fun AddLinkScreen(
             nameText.value = getName(link)
         }
 
-        //Text("Si dejas el siguiente campo en blanco no se asignará a ninguna carpeta", fontSize = 12.sp, color = getColor())
+        Text("Si dejas el siguiente campo en blanco no se asignará a ninguna carpeta",
+            fontSize = 12.sp,
+            color = getColor(),
+            modifier = Modifier.padding(top = 4.dp))
 
         LazyColumn(){
             item {
                 OutlinedTextFieldFolderCustom(
                     valueText = folderName,
                     showClearButton = showClearFolderButton,
-                    expandable = expanded,
+                    folderNameValid = folderValid,
                     onValueChange = {folder ->
                         folderName.value = folder
                         expanded.value = true
@@ -126,6 +132,15 @@ fun AddLinkScreen(
                     },
                     onGloballyPositioned = {}
                 )
+            }
+
+            if(!folderValid.value){
+               item{
+                   Text("Solo puedes guardar 5 enlaces en 'Favoritos'",
+                       fontSize = 12.sp,
+                       color = Color.Red,
+                       modifier = Modifier.padding(top = 4.dp))
+               }
             }
             item {
                 AnimatedVisibility(visible = expanded.value) {
@@ -164,14 +179,11 @@ fun AddLinkScreen(
                                     }
                                 }
                             }
-
                         }
                     }
                 }
             }
         }
-
-
 
         Row(modifier= Modifier
             .wrapContentHeight()
@@ -204,6 +216,7 @@ private fun OutlinedTextFieldCustom(
         isError = !linkModelValid.value && valueText.value.isBlank(),
         modifier = Modifier
             .fillMaxWidth()
+            .padding(top = 4.dp)
             .onFocusChanged { focusState ->
                 showClearButton.value = (focusState.isFocused)
             },
@@ -231,7 +244,7 @@ private fun OutlinedTextFieldCustom(
 private fun OutlinedTextFieldFolderCustom(
     valueText: MutableState<String>,
     showClearButton: MutableState<Boolean>,
-    expandable: MutableState<Boolean>,
+    folderNameValid: MutableState<Boolean>,
     onValueChange: (String) -> Unit,
     onClickIcon: (Boolean) -> Unit,
     onFocusChange: (FocusState) -> Unit,
@@ -249,6 +262,7 @@ private fun OutlinedTextFieldFolderCustom(
         keyboardActions = KeyboardActions(onDone = {
             focusManager.moveFocus(FocusDirection.Down)
         }),
+        isError = !folderNameValid.value,
         placeholder = { Text("None", color = getPlaceholderColor())},
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
@@ -258,7 +272,6 @@ private fun OutlinedTextFieldFolderCustom(
             IconButton(onClick = { onClickIcon.invoke(showClearButton.value)}) {
                 Icon(imageVector = if(showClearButton.value)Icons.Filled.Clear else Icons.Filled.ArrowDropDown, contentDescription = "Clear", tint = getColor())
             }
-
         },
         textStyle = TextStyle(fontSize = 16.sp, color = getColor())
     )
@@ -313,6 +326,7 @@ private fun AddLinkScreenPreview() {
             remember{mutableStateOf("")},
             remember{mutableStateOf("")},
             remember{mutableStateOf(false)},
+            remember{mutableStateOf(true)},
             remember{mutableStateOf(true)},
             mutableSetOf())
     }

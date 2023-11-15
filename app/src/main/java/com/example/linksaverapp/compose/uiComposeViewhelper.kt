@@ -47,6 +47,19 @@ fun createLinkModel(
 private fun validateLinkModel(name: String, link: String): Boolean {
     return name.isNotBlank() && link.isNotBlank()
 }
+private fun validateFolderName(name: String?, folderMap: MutableMap<String, MutableList<LinkModel>>): Boolean {
+    name?.let{ folderName ->
+        if(folderName.isBlank() || folderName != "Favoritos"){
+            return true
+        }
+        folderMap["Favoritos"]?.let{ list ->
+            return list.size < 5
+        }
+        return true
+    }
+    return true
+}
+
 
 fun getDate(): String {
     val time = Calendar.getInstance().time
@@ -204,9 +217,12 @@ fun insertLink(
 }
 
 
-fun updateLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel){
+fun updateLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel, FolderNameIsValid: MutableState<Boolean>, folderMap: MutableMap<String, MutableList<LinkModel>>){
+    FolderNameIsValid.value = validateFolderName(link.folder, folderMap )
+    if(FolderNameIsValid.value){
         linkSaverViewModel.updateLink(link)
         Log.i(TAG, "DB deleted link: $link")
+    }
 }
 
 @Composable
