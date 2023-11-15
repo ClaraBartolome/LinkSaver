@@ -41,12 +41,7 @@ fun LinkCard(
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxSize()
-            .combinedClickable(
-                //AQUI EL SELECTABLE
-                onClick = {},
-                onLongClick = {}
-            ),
+            .fillMaxSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = lightGreen,
@@ -77,6 +72,7 @@ fun LinkCard(
             }
             Column(modifier = Modifier
                 .fillMaxHeight()
+                .padding(start = 8.dp)
                 .clickable { onLinkLongPressed.invoke() }){
                 Image(painter = painterResource(id = R.drawable.ic_more), contentDescription = "", modifier = Modifier
                     .size(32.dp))

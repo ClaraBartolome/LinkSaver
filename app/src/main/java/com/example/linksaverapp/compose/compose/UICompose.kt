@@ -79,7 +79,9 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 isLinkModelValid = isLinkModelValid,
                 isAlertOpen = isAlertOpen,
                 insertLinkAction = {
-                    //TODO capar carpeta vacia
+                    if(folderText.value.isBlank()){
+                        folderText.value = ""
+                    }
                     insertLink(
                         linkSaverViewModel = linkSaverViewModel,
                         name = nameText,
@@ -139,9 +141,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             }
             composable(route = LinkScreens.SortingConfig.name) {
                 screen.value = LinkScreens.SortingConfig
-                SortScreen(selectedOption, radioOptions) { option ->
-
-                }
+                SortScreen(selectedOption, radioOptions)
             }
             composable(route = LinkScreens.Settings.name) {
                 screen.value = LinkScreens.Settings

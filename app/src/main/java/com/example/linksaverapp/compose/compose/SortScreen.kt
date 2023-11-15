@@ -22,7 +22,7 @@ import com.example.linksaverapp.Utils.SortRadioOptions
 import com.example.linksaverapp.ui.theme.mediumGreen
 
 @Composable
-fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: List<SortRadioOptions>, onOptionSelected: (SortRadioOptions) -> Unit) {
+fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: List<SortRadioOptions>) {
 // Note that Modifier.selectableGroup() is essential to ensure correct accessibility behavior
     Column(Modifier.selectableGroup()) {
         Spacer(modifier = Modifier.height(16.dp))
