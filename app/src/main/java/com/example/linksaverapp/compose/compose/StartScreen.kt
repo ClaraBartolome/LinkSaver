@@ -28,6 +28,7 @@ fun StartScreen(
     folderMap: MutableMap<String, MutableList<LinkModel>>,
     openBottomSheet: MutableState<Boolean>,
     onDeleteLink: @Composable() (LinkModel) -> Unit,
+    onEditLink: @Composable() (LinkModel) -> Unit,
     onShareLink: (String, String) -> Unit,
     onClickAction: (String) -> Unit
 ) {
@@ -94,6 +95,17 @@ fun StartScreen(
                     )
                 )
             },
+            onEditLink = { onEditLink.invoke(
+                LinkModel(
+                    linkId.value,
+                    linkName.value,
+                    linkText.value,
+                    linkDateOg.value,
+                    linkDateMod.value,
+                    linkFolder.value,
+                    linkProtected.value
+                )
+            ) },
             onShareLink = {
                 onShareLink.invoke(linkName.value, linkText.value)
             })
@@ -105,7 +117,8 @@ fun StartScreen(
 private fun LinkActionsSheet(
     onDismissSheet: () -> Unit,
     onDeleteLink: @Composable() () -> Unit,
-    onShareLink: () -> Unit
+    onShareLink: () -> Unit,
+    onEditLink: @Composable() () -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
@@ -124,7 +137,11 @@ private fun LinkActionsSheet(
             onDeleteLink.invoke()
             onDismissSheet.invoke()
         },
-            onShareLink = {onShareLink.invoke()})
+            onShareLink = {onShareLink.invoke()},
+            onEditLink = {
+                onEditLink.invoke()
+                onDismissSheet.invoke()
+            })
         Spacer(Modifier.height(64.dp))
     }
 }

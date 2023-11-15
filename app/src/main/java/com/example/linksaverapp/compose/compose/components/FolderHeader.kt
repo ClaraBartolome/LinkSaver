@@ -34,7 +34,7 @@ import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 @Composable
 fun FolderHeader(title: String, expandedState: MutableState<Boolean>) {
     val rotationState by animateFloatAsState(
-        targetValue = if (expandedState.value) 180f else 0f, label = ""
+        targetValue = if (expandedState.value) 0f else 90f, label = ""
     )
     Row(
         verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxSize().clickable { expandedState.value = !expandedState.value }

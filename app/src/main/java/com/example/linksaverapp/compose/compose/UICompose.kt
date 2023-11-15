@@ -21,11 +21,13 @@ import com.example.linksaverapp.Utils.LinkScreens
 import com.example.linksaverapp.Utils.radioOptions
 import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.SortTree
+import com.example.linksaverapp.compose.getDate
 import com.example.linksaverapp.compose.insertLink
 import com.example.linksaverapp.compose.openLink
 import com.example.linksaverapp.compose.shareLink
 import com.example.linksaverapp.compose.sortFolderList
 import com.example.linksaverapp.compose.sortedLinkList
+import com.example.linksaverapp.compose.updateLink
 import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -52,6 +54,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val nameText = remember { mutableStateOf("") }
     val folderText = remember { mutableStateOf("") }
     val isProtected = remember { mutableStateOf(false) }
+    val linkModel = remember { mutableStateOf(LinkModel()) }
     val isLinkModelValid = remember { mutableStateOf(true) }
 
     //Bottomsheet
@@ -90,7 +93,16 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                         isProtected = isProtected,
                         linkModelIsValid = isLinkModelValid
                     )
-                    //run { linkSaverViewModel.getAllLinksByNameAsc() }
+                },
+                editLinkAction = {
+                    with(linkModel.value){
+                        this.name = nameText.value
+                        link = linkText.value
+                        folder = folderText.value
+                        this.isProtected = if(isProtected.value) 1 else 0
+                        dateOfModified = getDate()
+                    }
+                    updateLink(linkSaverViewModel = linkSaverViewModel, link = linkModel.value)
                 },
                 searchText = searchText,
                 onTextChange = {text -> searchText.value = text},
@@ -108,11 +120,6 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             composable(route = LinkScreens.Start.name) {
                 SortTree(option = selectedOption.value, linkSaverViewModel = linkSaverViewModel)
                 screen.value = LinkScreens.Start
-                linkText.value = ""
-                nameText.value = ""
-                folderText.value = ""
-                isProtected.value = false
-                isLinkModelValid.value = true
                 StartScreen(
                     allLinks = links,
                     folderMap = linkList,
@@ -125,11 +132,35 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                         )
                     },
                     onShareLink = {name, link -> shareLink(ctx, name, link) },
+                    onEditLink = {link ->
+                        linkModel.value = link
+                        nameText.value = link.name
+                        linkText.value = link.link
+                        folderText.value = link.folder?: ""
+                        isProtected.value = link.isProtected == 1
+                        isLinkModelValid.value = true
+                        navController.navigate(LinkScreens.Edit.name)},
                     onClickAction = { url -> openLink(ctx, url) }
                 )
             }
             composable(route = LinkScreens.Add.name) {
                 screen.value = LinkScreens.Add
+                linkText.value = ""
+                nameText.value = ""
+                folderText.value = ""
+                isProtected.value = false
+                isLinkModelValid.value = true
+                AddLinkScreen(
+                    nameText,
+                    linkText,
+                    folderText,
+                    isProtected,
+                    isLinkModelValid,
+                    linkList.keys
+                )
+            }
+            composable(route = LinkScreens.Edit.name) {
+                screen.value = LinkScreens.Edit
                 AddLinkScreen(
                     nameText,
                     linkText,

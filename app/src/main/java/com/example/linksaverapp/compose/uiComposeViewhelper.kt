@@ -48,7 +48,7 @@ private fun validateLinkModel(name: String, link: String): Boolean {
     return name.isNotBlank() && link.isNotBlank()
 }
 
-private fun getDate(): String {
+fun getDate(): String {
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
     return formatter.format(time)
@@ -201,6 +201,12 @@ fun insertLink(
             )
         )
     }
+}
+
+
+fun updateLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel){
+        linkSaverViewModel.updateLink(link)
+        Log.i(TAG, "DB deleted link: $link")
 }
 
 @Composable

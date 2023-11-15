@@ -23,6 +23,7 @@ fun TopAppBar(
     isLinkModelValid: MutableState<Boolean>,
     isAlertOpen: MutableState<Boolean>,
     insertLinkAction: () -> Unit,
+    editLinkAction: () -> Unit,
     searchText: MutableState<String>,
     onTextChange: (String) -> Unit,
     onSearchInit: () -> List<LinkModel>,
@@ -44,7 +45,8 @@ fun TopAppBar(
             isLinkModelValid = isLinkModelValid,
             isSearchOpen = isSearchOpen,
             isAlertOpen = isAlertOpen,
-            addLinkAction = insertLinkAction
+            addLinkAction = insertLinkAction,
+            editLinkAction = editLinkAction
         )
         //TODO capar carpeta vacia
         //run { linkSaverViewModel.getAllLinksByNameAsc() }
@@ -58,7 +60,8 @@ fun TopAppBarDefault(
     isLinkModelValid: MutableState<Boolean>,
     isSearchOpen: MutableState<Boolean>,
     isAlertOpen: MutableState<Boolean>,
-    addLinkAction: () -> Unit
+    addLinkAction: () -> Unit,
+    editLinkAction: () -> Unit
 ) {
     TopAppBar(
         title = { TitleText(screen) },
@@ -75,10 +78,9 @@ fun TopAppBarDefault(
                         iconId = R.drawable.ic_arrow_back,
                         action = { navController.popBackStack() })
                 }
-
                 else -> {
                     IconButtonApp(iconId = R.drawable.ic_arrow_back, action = {
-                        if (screen == LinkScreens.Add) {
+                        if (screen == LinkScreens.Add || screen == LinkScreens.Edit) {
                             isAlertOpen.value = true
                         }
                     })
@@ -98,7 +100,6 @@ fun TopAppBarDefault(
                         iconId = R.drawable.ic_add,
                         action = { navController.navigate(LinkScreens.Add.name) })
                 }
-
                 LinkScreens.Add -> {
                     IconButtonApp(iconId = R.drawable.ic_check, action = {
                         addLinkAction.invoke()
@@ -107,14 +108,20 @@ fun TopAppBarDefault(
                         }
                     })
                 }
-
                 LinkScreens.Settings -> {
                     Image(
                         painter = painterResource(id = R.drawable.ic_settings_outlined),
                         contentDescription = ""
                     )
                 }
-
+                LinkScreens.Edit -> {
+                    IconButtonApp(iconId = R.drawable.ic_check, action = {
+                        editLinkAction.invoke()
+                        if (isLinkModelValid.value) {
+                            navController.popBackStack()
+                        }
+                    })
+                }
                 else -> {}
             }
         }
@@ -136,6 +143,7 @@ private fun TitleText(screen: LinkScreens) {
     when (screen) {
         LinkScreens.Start -> Text("GuardaLinks")
         LinkScreens.Add -> Text("Añade un Link")
+        LinkScreens.Edit -> Text("Edita un Link")
         LinkScreens.Settings -> Text("Configuración")
         else -> Text("GuardaLinks")
     }

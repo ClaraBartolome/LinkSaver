@@ -16,7 +16,7 @@ interface LinkSaverDao {
     suspend fun insertLink(link: LinkModel)
 
     @Update
-    fun updateLink(link: LinkModel)
+    suspend fun updateLink(link: LinkModel)
 
     @Delete
     suspend fun deleteLink(link: LinkModel)
