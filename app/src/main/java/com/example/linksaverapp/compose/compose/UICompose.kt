@@ -142,7 +142,11 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                         isProtected.value = link.isProtected == 1
                         isLinkModelValid.value = true
                         navController.navigate(LinkScreens.Edit.name)},
-                    onClickAction = { url -> openLink(ctx, url) }
+                    onClickAction = { url -> openLink(ctx, url)},
+                    onAddFavLink = {linkModel ->
+                        updateLink(linkSaverViewModel, linkModel, isFolderNameValid, folderMap = linkList)
+                    },
+                    folderNameValid = isFolderNameValid
                 )
             }
             composable(route = LinkScreens.Add.name) {
@@ -184,7 +188,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             }
         }
         if (isAlertOpen.value) {
-            AlertDialog(
+            com.example.linksaverapp.compose.compose.components.AlertDialog(
                 onDismissRequest = {
                     isAlertOpen.value = false
                 },

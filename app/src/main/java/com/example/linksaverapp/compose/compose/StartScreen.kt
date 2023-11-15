@@ -1,5 +1,6 @@
 package com.example.linksaverapp.compose.compose
 
+import android.widget.Toast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.compose.compose.components.ExpandableLinkList
 import com.example.linksaverapp.compose.compose.components.FolderHeaderType
@@ -30,6 +32,8 @@ fun StartScreen(
     openBottomSheet: MutableState<Boolean>,
     onDeleteLink: @Composable() (LinkModel) -> Unit,
     onEditLink: @Composable() (LinkModel) -> Unit,
+    onAddFavLink: @Composable() (LinkModel) -> Unit,
+    folderNameValid: MutableState<Boolean>,
     onShareLink: (String, String) -> Unit,
     onClickAction: (String) -> Unit
 ) {
@@ -125,6 +129,25 @@ fun StartScreen(
             ) },
             onShareLink = {
                 onShareLink.invoke(linkName.value, linkText.value)
+            },
+            onAddFavLink = {
+                onAddFavLink.invoke(
+                    LinkModel(
+                        linkId.value,
+                        linkName.value,
+                        linkText.value,
+                        linkDateOg.value,
+                        linkDateMod.value,
+                        "Favoritos",
+                        linkProtected.value
+                    )
+                )
+                var toastText= "No puedes añadir más enlaces a Favoritos"
+                if(folderNameValid.value){
+                    openBottomSheet.value = false
+                    toastText = "Enlace añadido a Favoritos"
+                }
+                Toast.makeText(LocalContext.current, toastText, Toast.LENGTH_SHORT).show()
             })
     }
 }
@@ -136,6 +159,7 @@ private fun LinkActionsSheet(
     onDeleteLink: @Composable() () -> Unit,
     onShareLink: () -> Unit,
     onEditLink: @Composable() () -> Unit,
+    onAddFavLink: @Composable() () -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
@@ -158,6 +182,9 @@ private fun LinkActionsSheet(
             onEditLink = {
                 onEditLink.invoke()
                 onDismissSheet.invoke()
+            },
+            onFavLink = {
+                onAddFavLink.invoke()
             })
         Spacer(Modifier.height(64.dp))
     }

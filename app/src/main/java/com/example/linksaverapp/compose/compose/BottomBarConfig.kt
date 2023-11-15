@@ -27,7 +27,7 @@ import com.example.linksaverapp.Utils.BottomBarOption
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
-fun BottomBarConfig(onDeleteLink: @Composable() () -> Unit, onShareLink: () -> Unit, onEditLink: @Composable() () -> Unit) {
+fun BottomBarConfig(onDeleteLink: @Composable() () -> Unit, onShareLink: () -> Unit, onEditLink: @Composable() () -> Unit, onFavLink: @Composable() () -> Unit) {
     Column(
         modifier = Modifier.padding(start = 16.dp),
         verticalArrangement = Arrangement.Top
@@ -48,6 +48,7 @@ fun BottomBarConfig(onDeleteLink: @Composable() () -> Unit, onShareLink: () -> U
         when(optionChosen.value){
             BottomBarOption.Delete -> onDeleteLink()
             BottomBarOption.Share -> onShareLink()
+            BottomBarOption.AddFavorite -> onFavLink()
             BottomBarOption.Edit -> onEditLink()
             BottomBarOption.None -> {}
             else -> ShowToast()
@@ -93,6 +94,6 @@ private fun getColor(): Color {
 @Composable
 private fun DefaultBottombarPreview() {
     LinkSaverAppTheme {
-        BottomBarConfig({}, {}, {})
+        BottomBarConfig({}, {}, {}, {})
     }
 }

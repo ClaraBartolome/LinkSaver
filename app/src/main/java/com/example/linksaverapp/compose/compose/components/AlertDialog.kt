@@ -1,4 +1,4 @@
-package com.example.linksaverapp.compose.compose
+package com.example.linksaverapp.compose.compose.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
