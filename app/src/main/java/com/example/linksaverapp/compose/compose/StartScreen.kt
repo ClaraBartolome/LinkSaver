@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.compose.compose.components.ExpandableLinkList
+import com.example.linksaverapp.compose.compose.components.FolderHeaderType
 import com.example.linksaverapp.compose.compose.components.LinkCard
 import com.example.linksaverapp.db.Model.LinkModel
 
@@ -41,8 +42,10 @@ fun StartScreen(
     val linkProtected = remember { mutableStateOf(0) }
     allLinks.value?.let {
         Column {
-            for ((key, value) in folderMap) {
-                ExpandableLinkList(folderName = key, folderList = value, onLinklongPressed = {
+            /*if(!folderMap.containsKey("Favoritos")){
+                ExpandableLinkList(folderName = "Favoritos", folderList = mutableListOf(), onLinklongPressed = {}, onLinkClick = { })
+            }else{
+                ExpandableLinkList(folderName = "Favoritos", folderList = folderMap["Favoritos"], onLinklongPressed = {
                     openBottomSheet.value = true
                     it?.let {
                         linkId.value = it.id
@@ -54,7 +57,33 @@ fun StartScreen(
                         linkProtected.value = it.isProtected
                     }
                 }, onLinkClick = { url -> onClickAction.invoke(url) })
+            }*/
+            ExpandableLinkList(folderName = "Favoritos", folderList = folderMap["Favoritos"]?: mutableListOf(), FolderHeaderType.Favorite, onLinklongPressed = {
+                openBottomSheet.value = true
+                it?.let {
+                    linkId.value = it.id
+                    linkName.value = it.name
+                    linkText.value = it.link
+                    linkDateOg.value = it.dateOfCreation
+                    linkDateMod.value = it.dateOfModified
+                    linkFolder.value = it.folder
+                    linkProtected.value = it.isProtected
+                }
+            }, onLinkClick = { url -> onClickAction.invoke(url) })
 
+            for ((key, value) in folderMap) {
+                ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, onLinklongPressed = {
+                    openBottomSheet.value = true
+                    it?.let {
+                        linkId.value = it.id
+                        linkName.value = it.name
+                        linkText.value = it.link
+                        linkDateOg.value = it.dateOfCreation
+                        linkDateMod.value = it.dateOfModified
+                        linkFolder.value = it.folder
+                        linkProtected.value = it.isProtected
+                    }
+                }, onLinkClick = { url -> onClickAction.invoke(url) })
             }
             if (folderMap.containsKey("") && folderMap[""] != null) {
                 folderMap[""]?.let { list ->

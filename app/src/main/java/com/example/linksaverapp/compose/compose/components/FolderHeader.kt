@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,37 +33,52 @@ import com.example.linksaverapp.R
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
-fun FolderHeader(title: String, expandedState: MutableState<Boolean>) {
+fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: FolderHeaderType, number: Int = 0) {
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState.value) 0f else 90f, label = ""
     )
     Row(
-        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxSize().clickable { expandedState.value = !expandedState.value }
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+            .fillMaxSize()
+            .clickable { expandedState.value = !expandedState.value }
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_folder),
-            contentDescription = "",
-            modifier = Modifier.padding(start = 8.dp),
-            colorFilter = ColorFilter.tint(color = getColor())
-        )
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 8.dp)
-                .weight(6f),
-            text = title,
-            fontSize = 18.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        IconButton(
-            modifier = Modifier
-                .weight(1f)
-                .rotate(rotationState),
-            onClick = {expandedState.value = !expandedState.value}) {
-            Icon(
-                imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = "Drop-Down Arrow"
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start, modifier = Modifier.weight(1f)) {
+            Image(
+                painter = painterResource(id = getIcon(type)),
+                contentDescription = "",
+                modifier = Modifier.padding(start = 8.dp),
+                colorFilter = ColorFilter.tint(color = getColor())
             )
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                text = title,
+                fontSize = 18.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End, modifier = Modifier.weight(1f)){
+            if(type == FolderHeaderType.Favorite){
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
+                    text = "$number/5",
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            IconButton(
+                modifier = Modifier
+                    .rotate(rotationState),
+                onClick = {expandedState.value = !expandedState.value}) {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "Drop-Down Arrow"
+                )
+            }
         }
     }
 }
@@ -74,13 +90,26 @@ private fun getColor(): Color {
     } else Color.Black
 }
 
+private fun getIcon(name: FolderHeaderType): Int{
+    return if(name == FolderHeaderType.Favorite){
+        R.drawable.ic_favorite
+    }else{
+        R.drawable.ic_folder
+    }
+}
+
+enum class FolderHeaderType {
+    Normal,
+    Favorite
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DefaultExpandableHeaderPreview() {
     LinkSaverAppTheme {
         LazyColumn(){
             item{
-                FolderHeader(title = "Titulo", expandedState = remember{ mutableStateOf(false) })
+                FolderHeader(title = "Titulo", expandedState = remember{ mutableStateOf(false) }, FolderHeaderType.Favorite)
             }
         }
     }

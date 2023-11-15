@@ -18,6 +18,7 @@ import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 fun ExpandableLinkList(
     folderName: String? = null,
     folderList: MutableList<LinkModel>,
+    folderHeaderType: FolderHeaderType,
     onLinklongPressed: (LinkModel?)-> Unit,
     onLinkClick: (String) -> Unit
 ) {
@@ -30,7 +31,7 @@ fun ExpandableLinkList(
     ){
         if(!folderName.isNullOrBlank()){
             item {
-                FolderHeader(title = folderName, expandedState = expandedState)
+                FolderHeader(title = folderName, expandedState = expandedState, folderHeaderType)
             }
         }
         if (expandedState.value) {
@@ -52,8 +53,8 @@ fun DefaultExpandableListPreview() {
     LinkSaverAppTheme {
         ExpandableLinkList(folderName = "Favoritos",
             mutableListOf(
-                LinkModel(name= "Buzzfeed")
-            ), {}, {}
+                LinkModel(name= "Buzzfeed"),
+            ), FolderHeaderType.Favorite, {}, {}
         )
     }
 }
