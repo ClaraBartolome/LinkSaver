@@ -84,7 +84,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 isFolderNameValid = isFolderNameValid,
                 isAlertOpen = isAlertOpen,
                 insertLinkAction = {
-                    if(folderText.value.isBlank()){
+                    if (folderText.value.isBlank()) {
                         folderText.value = ""
                     }
                     insertLink(
@@ -97,20 +97,25 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     )
                 },
                 editLinkAction = {
-                    with(linkModel.value){
+                    with(linkModel.value) {
                         this.name = nameText.value
                         link = linkText.value
                         folder = folderText.value
-                        this.isProtected = if(isProtected.value) 1 else 0
+                        this.isProtected = if (isProtected.value) 1 else 0
                         dateOfModified = getDate()
                     }
-                    updateLink(linkSaverViewModel = linkSaverViewModel, link = linkModel.value, FolderNameIsValid = isFolderNameValid, folderMap = linkList)
+                    updateLink(
+                        linkSaverViewModel = linkSaverViewModel,
+                        link = linkModel.value,
+                        FolderNameIsValid = isFolderNameValid,
+                        folderMap = linkList
+                    )
                 },
                 searchText = searchText,
-                onTextChange = {text -> searchText.value = text},
+                onTextChange = { text -> searchText.value = text },
                 onClickOnSearched = { openLink(ctx, it) },
                 onSearchInit = { sortedLinkList(links.value, searchText.value) },
-                onCloseClicked = {isSearchOpen.value = false}
+                onCloseClicked = { isSearchOpen.value = false }
             )
         }
     ) { innerPadding ->
@@ -133,18 +138,25 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                             linkSaverViewModel = linkSaverViewModel
                         )
                     },
-                    onShareLink = {name, link -> shareLink(ctx, name, link) },
-                    onEditLink = {link ->
+                    onShareLink = { name, link -> shareLink(ctx, name, link) },
+                    onEditLink = { link ->
                         linkModel.value = link
                         nameText.value = link.name
                         linkText.value = link.link
-                        folderText.value = link.folder?: ""
+                        folderText.value = link.folder ?: ""
                         isProtected.value = link.isProtected == 1
                         isLinkModelValid.value = true
-                        navController.navigate(LinkScreens.Edit.name)},
-                    onClickAction = { url -> openLink(ctx, url)},
-                    onAddFavLink = {linkModel ->
-                        updateLink(linkSaverViewModel, linkModel, isFolderNameValid, folderMap = linkList)
+                        navController.navigate(LinkScreens.Edit.name)
+                    },
+                    onClickAction = { url -> openLink(ctx, url) },
+                    onAddFavLink = { linkModel ->
+                        updateLink(
+                            linkSaverViewModel,
+                            linkModel,
+                            isFolderNameValid,
+                            folderMap = linkList
+                        )
+                        SortTree(option = selectedOption.value, linkSaverViewModel = linkSaverViewModel)
                     },
                     folderNameValid = isFolderNameValid
                 )
@@ -188,7 +200,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             }
         }
         if (isAlertOpen.value) {
-            com.example.linksaverapp.compose.compose.components.AlertDialog(
+            com.example.linksaverapp.compose.compose.components.AlertDialogCustom(
                 onDismissRequest = {
                     isAlertOpen.value = false
                 },

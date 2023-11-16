@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
-fun AlertDialog(
+fun AlertDialogCustom(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
     dialogTitle: String,
@@ -51,7 +51,7 @@ fun AlertDialog(
 @Composable
 private fun DefaultAlertPreview() {
     LinkSaverAppTheme {
-        AlertDialog(
+        AlertDialogCustom(
             onDismissRequest = { },
             onConfirmation = {},
             dialogTitle = "No has guardado los cambios",

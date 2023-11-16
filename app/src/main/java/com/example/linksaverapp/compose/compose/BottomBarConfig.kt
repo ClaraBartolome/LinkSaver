@@ -27,7 +27,12 @@ import com.example.linksaverapp.Utils.BottomBarOption
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
-fun BottomBarConfig(onDeleteLink: @Composable() () -> Unit, onShareLink: () -> Unit, onEditLink: @Composable() () -> Unit, onFavLink: @Composable() () -> Unit) {
+fun BottomBarConfig(
+    isFavorite: Boolean,
+    onDeleteLink: @Composable() () -> Unit,
+    onShareLink: () -> Unit,
+    onEditLink: @Composable() () -> Unit,
+    onFavLink: @Composable() () -> Unit) {
     Column(
         modifier = Modifier.padding(start = 16.dp),
         verticalArrangement = Arrangement.Top
@@ -37,7 +42,7 @@ fun BottomBarConfig(onDeleteLink: @Composable() () -> Unit, onShareLink: () -> U
         }
         ItemBottomBar(name = "Añadir a carpeta", icon = R.drawable.ic_add) { optionChosen.value = BottomBarOption.AddFolder }
         Spacer(modifier = Modifier.height(8.dp))
-        ItemBottomBar(name = "Añadir a favoritos", icon = R.drawable.ic_favorite_border) { optionChosen.value = BottomBarOption.AddFavorite }
+        ItemBottomBar(name = if(isFavorite)"Quitar de Favoritos" else "Añadir a favoritos", icon = if(isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border) { optionChosen.value = BottomBarOption.AddFavorite }
         Spacer(modifier = Modifier.height(8.dp))
         ItemBottomBar(name = "Compartir", icon = R.drawable.ic_share) {optionChosen.value = BottomBarOption.Share}
         Spacer(modifier = Modifier.height(8.dp))
@@ -94,6 +99,6 @@ private fun getColor(): Color {
 @Composable
 private fun DefaultBottombarPreview() {
     LinkSaverAppTheme {
-        BottomBarConfig({}, {}, {}, {})
+        BottomBarConfig(false, {}, {}, {}, {})
     }
 }

@@ -100,6 +100,7 @@ fun StartScreen(
 
     if (openBottomSheet.value) {
         LinkActionsSheet(
+            linkFolder.value.equals("Favoritos"),
             onDismissSheet = {
                 openBottomSheet.value = false
             },
@@ -138,23 +139,27 @@ fun StartScreen(
                         linkText.value,
                         linkDateOg.value,
                         linkDateMod.value,
-                        "Favoritos",
+                        if(linkFolder.value.equals("Favoritos")) "" else "Favoritos",
                         linkProtected.value
                     )
                 )
-                var toastText= "No puedes añadir más enlaces a Favoritos"
-                if(folderNameValid.value){
-                    openBottomSheet.value = false
-                    toastText = "Enlace añadido a Favoritos"
-                }
-                Toast.makeText(LocalContext.current, toastText, Toast.LENGTH_SHORT).show()
+                openBottomSheet.value = false
+                folderToast(isFavorite = linkFolder.value.equals("Favoritos"), isFolderNameValid = folderNameValid.value)
             })
     }
+}
+
+@Composable
+private fun folderToast(isFavorite: Boolean, isFolderNameValid: Boolean): Boolean{
+    val toastText= if(isFavorite) "Enlace retirado de Favoritos" else if(isFolderNameValid) "Enlace añadido a Favoritos"  else "No puedes añadir más enlaces a Favoritos"
+    Toast.makeText(LocalContext.current, toastText, Toast.LENGTH_SHORT).show()
+    return false
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LinkActionsSheet(
+    isFavorite: Boolean,
     onDismissSheet: () -> Unit,
     onDeleteLink: @Composable() () -> Unit,
     onShareLink: () -> Unit,
@@ -174,7 +179,9 @@ private fun LinkActionsSheet(
 
     ) {
         // Sheet content
-        BottomBarConfig(onDeleteLink = {
+        BottomBarConfig(
+            isFavorite = isFavorite,
+            onDeleteLink = {
             onDeleteLink.invoke()
             onDismissSheet.invoke()
         },
