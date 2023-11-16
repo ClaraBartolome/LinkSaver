@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">LinkSaver</string>
+    <string name="app_name" translatable="false">LinkSaver</string>
+    <string name="favorites">Favoritos</string>
 </resources>

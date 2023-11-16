@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Observer
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.LinkScreens
+import com.example.linksaverapp.Utils.favoritesStringID
 import com.example.linksaverapp.Utils.radioOptions
 import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.SortTree
@@ -28,6 +30,7 @@ import com.example.linksaverapp.compose.shareLink
 import com.example.linksaverapp.compose.sortFolderList
 import com.example.linksaverapp.compose.sortedLinkList
 import com.example.linksaverapp.compose.updateLink
+import com.example.linksaverapp.compose.viewHelperVar
 import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -73,6 +76,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colors.primary
     )
+    
+    viewHelperVar.favoritesString = stringResource(id = favoritesStringID)
 
     Scaffold(
         topBar = {

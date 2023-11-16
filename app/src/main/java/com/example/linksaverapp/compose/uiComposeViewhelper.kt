@@ -11,12 +11,16 @@ import androidx.compose.runtime.MutableState
 import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.SortRadioOptions
 import com.example.linksaverapp.compose.compose.TAG
+import com.example.linksaverapp.compose.viewHelperVar.favoritesString
 import com.example.linksaverapp.db.Model.LinkModel
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+object viewHelperVar{
+    var favoritesString = ""
+}
 
 //PODRIA HACER UNA CONFIGURACION PARA MOSTRAR POR DEFECTO EL HOST O EL PATH
 fun testURL(): String {
@@ -49,10 +53,10 @@ private fun validateLinkModel(name: String, link: String): Boolean {
 }
 private fun validateFolderName(name: String?, folderMap: MutableMap<String, MutableList<LinkModel>>): Boolean {
     name?.let{ folderName ->
-        if(folderName.isBlank() || folderName != "Favoritos"){
+        if(folderName.isBlank() || folderName != favoritesString){
             return true
         }
-        folderMap["Favoritos"]?.let{ list ->
+        folderMap[favoritesString]?.let{ list ->
             return list.size < 5
         }
         return true

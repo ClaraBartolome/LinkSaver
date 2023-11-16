@@ -19,7 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.linksaverapp.Utils.favoritesStringID
 import com.example.linksaverapp.compose.compose.components.ExpandableLinkList
 import com.example.linksaverapp.compose.compose.components.FolderHeaderType
 import com.example.linksaverapp.compose.compose.components.LinkCard
@@ -46,10 +48,10 @@ fun StartScreen(
     val linkProtected = remember { mutableStateOf(0) }
     allLinks.value?.let {
         Column {
-            ExpandableLinkList(folderName = "Favoritos",
-                folderList = folderMap["Favoritos"]?: mutableListOf(),
+            ExpandableLinkList(folderName = stringResource(id = favoritesStringID),
+                folderList = folderMap[stringResource(id = favoritesStringID)]?: mutableListOf(),
                 FolderHeaderType.Favorite,
-                number = folderMap["Favoritos"]?.size ?: 0,
+                number = folderMap[stringResource(id = favoritesStringID)]?.size ?: 0,
                 onLinklongPressed = {
                 openBottomSheet.value = true
                 it?.let {
@@ -63,7 +65,7 @@ fun StartScreen(
                 }
             }, onLinkClick = { url -> onClickAction.invoke(url) })
 
-            for ((key, value) in folderMap.minus("Favoritos")) {
+            for ((key, value) in folderMap.minus(stringResource(id = favoritesStringID))) {
                 ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, onLinklongPressed = {
                     openBottomSheet.value = true
                     it?.let {
@@ -100,7 +102,7 @@ fun StartScreen(
 
     if (openBottomSheet.value) {
         LinkActionsSheet(
-            linkFolder.value.equals("Favoritos"),
+            linkFolder.value.equals(stringResource(id = favoritesStringID)),
             onDismissSheet = {
                 openBottomSheet.value = false
             },
@@ -139,12 +141,12 @@ fun StartScreen(
                         linkText.value,
                         linkDateOg.value,
                         linkDateMod.value,
-                        if(linkFolder.value.equals("Favoritos")) "" else "Favoritos",
+                        if(linkFolder.value.equals(stringResource(id = favoritesStringID))) "" else stringResource(id = favoritesStringID),
                         linkProtected.value
                     )
                 )
                 openBottomSheet.value = false
-                folderToast(isFavorite = linkFolder.value.equals("Favoritos"), isFolderNameValid = folderNameValid.value)
+                folderToast(isFavorite = linkFolder.value.equals(stringResource(id = favoritesStringID)), isFolderNameValid = folderNameValid.value)
             })
     }
 }
