@@ -53,7 +53,7 @@ private fun validateLinkModel(name: String, link: String): Boolean {
 }
 private fun validateFolderName(name: String?, folderMap: MutableMap<String, MutableList<LinkModel>>): Boolean {
     name?.let{ folderName ->
-        if(folderName.isBlank() || folderName != favoritesString){
+        if(folderName.isBlank() || folderName.trimStart().trimEnd() != favoritesString){
             return true
         }
         folderMap[favoritesString]?.let{ list ->

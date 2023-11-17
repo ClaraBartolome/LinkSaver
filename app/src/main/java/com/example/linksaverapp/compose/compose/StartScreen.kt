@@ -180,7 +180,10 @@ fun StartScreen(
                 linkProtected.value
             )
         )
-        addLinktoFolder.value = false
+        if(folderNameValid.value){
+            addLinktoFolder.value = false
+            isAlertAddFolderOpen.value = false
+        }
     }
 }
 

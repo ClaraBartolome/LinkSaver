@@ -143,7 +143,6 @@ fun AlertDialogAddToFolder(
                                 ) {
                                     val copy = folderList.toMutableSet()
                                     copy.remove("")
-                                    copy.remove(favorites)
                                     LazyColumn(
                                         modifier = Modifier.heightIn(max = 150.dp),
                                     ) {
@@ -177,14 +176,10 @@ fun AlertDialogAddToFolder(
 
                         item{
                             Spacer(modifier = Modifier.height(20.dp))
-
                             Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
                                 Button(
                                     onClick = {
                                         onConfirmation.invoke()
-                                        if(folderNameValid.value){
-                                            onDismissRequest.invoke()
-                                        }
                                     },
                                     shape = RoundedCornerShape(50.dp),
                                     modifier = Modifier
