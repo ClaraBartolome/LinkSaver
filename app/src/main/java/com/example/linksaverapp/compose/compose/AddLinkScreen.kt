@@ -133,8 +133,7 @@ fun AddLinkScreen(
                     onFocusChange = { focusState ->
                         showClearFolderButton.value = (focusState.isFocused)
                         expanded.value = (focusState.isFocused)
-                    },
-                    onGloballyPositioned = {}
+                    }
                 )
             }
 
@@ -245,14 +244,13 @@ private fun OutlinedTextFieldCustom(
 
 
 @Composable
-private fun OutlinedTextFieldFolderCustom(
+fun OutlinedTextFieldFolderCustom(
     valueText: MutableState<String>,
     showClearButton: MutableState<Boolean>,
     folderNameValid: MutableState<Boolean>,
     onValueChange: (String) -> Unit,
     onClickIcon: (Boolean) -> Unit,
-    onFocusChange: (FocusState) -> Unit,
-    onGloballyPositioned: (Int)-> Unit
+    onFocusChange: (FocusState) -> Unit
 ){
     val focusManager = LocalFocusManager.current
     OutlinedTextField(value = valueText.value,
@@ -261,7 +259,6 @@ private fun OutlinedTextFieldFolderCustom(
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .onGloballyPositioned { onGloballyPositioned.invoke(it.size.width) }
             .onFocusChanged { onFocusChange.invoke(it) },
         keyboardActions = KeyboardActions(onDone = {
             focusManager.moveFocus(FocusDirection.Down)

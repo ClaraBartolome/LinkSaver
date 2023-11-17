@@ -203,10 +203,13 @@ fun insertLink(
     link: MutableState<String>,
     folder: MutableState<String>,
     isProtected: MutableState<Boolean>,
-    linkModelIsValid: MutableState<Boolean>
+    linkModelIsValid: MutableState<Boolean>,
+    folderNameIsValid: MutableState<Boolean>,
+    folderMap: MutableMap<String, MutableList<LinkModel>>
 ) {
     linkModelIsValid.value = validateLinkModel(name.value, link.value)
-    if (linkModelIsValid.value) {
+    folderNameIsValid.value = validateFolderName(folder.value, folderMap)
+    if (linkModelIsValid.value && folderNameIsValid.value) {
         linkSaverViewModel.insert(
             LinkModel(
                 name = name.value,
@@ -221,9 +224,9 @@ fun insertLink(
 }
 
 
-fun updateLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel, FolderNameIsValid: MutableState<Boolean>, folderMap: MutableMap<String, MutableList<LinkModel>>){
-    FolderNameIsValid.value = validateFolderName(link.folder, folderMap )
-    if(FolderNameIsValid.value){
+fun updateLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel, folderNameIsValid: MutableState<Boolean>, folderMap: MutableMap<String, MutableList<LinkModel>>){
+    folderNameIsValid.value = validateFolderName(link.folder, folderMap)
+    if(folderNameIsValid.value){
         linkSaverViewModel.updateLink(link)
         Log.i(TAG, "DB deleted link: $link")
     }

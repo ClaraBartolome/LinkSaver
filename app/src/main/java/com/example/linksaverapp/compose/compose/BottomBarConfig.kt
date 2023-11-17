@@ -32,7 +32,8 @@ fun BottomBarConfig(
     onDeleteLink: @Composable() () -> Unit,
     onShareLink: () -> Unit,
     onEditLink: @Composable() () -> Unit,
-    onFavLink: @Composable() () -> Unit) {
+    onFavLink: @Composable() () -> Unit,
+    onAddToFolder: @Composable() () -> Unit) {
     Column(
         modifier = Modifier.padding(start = 16.dp),
         verticalArrangement = Arrangement.Top
@@ -55,8 +56,8 @@ fun BottomBarConfig(
             BottomBarOption.Share -> onShareLink()
             BottomBarOption.AddFavorite -> onFavLink()
             BottomBarOption.Edit -> onEditLink()
-            BottomBarOption.None -> {}
-            else -> ShowToast()
+            BottomBarOption.AddFolder -> onAddToFolder()
+            else -> {}
         }
 
     }
@@ -99,6 +100,6 @@ private fun getColor(): Color {
 @Composable
 private fun DefaultBottombarPreview() {
     LinkSaverAppTheme {
-        BottomBarConfig(false, {}, {}, {}, {})
+        BottomBarConfig(false, {}, {}, {}, {}, {})
     }
 }

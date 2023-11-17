@@ -65,6 +65,9 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val isSheetOpen = remember { mutableStateOf(false) }
     val isAlertOpen = remember { mutableStateOf(false) }
 
+    //Alert
+    val isAlertAddFolderOpen = remember { mutableStateOf(false) }
+
     //Order
     val selectedOption = remember { mutableStateOf(radioOptions[0]) }
 
@@ -98,7 +101,9 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                         link = linkText,
                         folder = folderText,
                         isProtected = isProtected,
-                        linkModelIsValid = isLinkModelValid
+                        linkModelIsValid = isLinkModelValid,
+                        folderNameIsValid = isFolderNameValid,
+                        folderMap = linkList
                     )
                 },
                 editLinkAction = {
@@ -112,7 +117,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     updateLink(
                         linkSaverViewModel = linkSaverViewModel,
                         link = linkModel.value,
-                        FolderNameIsValid = isFolderNameValid,
+                        folderNameIsValid = isFolderNameValid,
                         folderMap = linkList
                     )
                 },
@@ -135,7 +140,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 StartScreen(
                     allLinks = links,
                     folderMap = linkList,
-                    openBottomSheet = isSheetOpen,
+                    isBottomSheetOpen = isSheetOpen,
+                    isAlertAddFolderOpen = isAlertAddFolderOpen,
                     onDeleteLink = { link ->
                         DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
                         SortTree(

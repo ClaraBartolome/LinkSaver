@@ -50,8 +50,6 @@ fun TopAppBar(
             addLinkAction = insertLinkAction,
             editLinkAction = editLinkAction
         )
-        //TODO capar carpeta vacia
-        //run { linkSaverViewModel.getAllLinksByNameAsc() }
     }
 }
 

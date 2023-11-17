@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -22,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.Utils.favoritesStringID
+import com.example.linksaverapp.compose.compose.components.AlertDialogAddToFolder
 import com.example.linksaverapp.compose.compose.components.ExpandableLinkList
 import com.example.linksaverapp.compose.compose.components.FolderHeaderType
 import com.example.linksaverapp.compose.compose.components.LinkCard
@@ -31,7 +31,8 @@ import com.example.linksaverapp.db.Model.LinkModel
 fun StartScreen(
     allLinks: State<List<LinkModel>?>,
     folderMap: MutableMap<String, MutableList<LinkModel>>,
-    openBottomSheet: MutableState<Boolean>,
+    isBottomSheetOpen: MutableState<Boolean>,
+    isAlertAddFolderOpen: MutableState<Boolean>,
     onDeleteLink: @Composable() (LinkModel) -> Unit,
     onEditLink: @Composable() (LinkModel) -> Unit,
     onAddFavLink: @Composable() (LinkModel) -> Unit,
@@ -44,8 +45,10 @@ fun StartScreen(
     val linkText = remember { mutableStateOf("") }
     val linkDateOg = remember { mutableStateOf("") }
     val linkDateMod = remember { mutableStateOf("") }
-    val linkFolder = remember { mutableStateOf<String?>(null) }
+    val linkFolder = remember { mutableStateOf("") }
     val linkProtected = remember { mutableStateOf(0) }
+
+    val addLinktoFolder = remember { mutableStateOf(false) }
     allLinks.value?.let {
         Column {
             ExpandableLinkList(folderName = stringResource(id = favoritesStringID),
@@ -53,28 +56,28 @@ fun StartScreen(
                 FolderHeaderType.Favorite,
                 number = folderMap[stringResource(id = favoritesStringID)]?.size ?: 0,
                 onLinklongPressed = {
-                openBottomSheet.value = true
+                isBottomSheetOpen.value = true
                 it?.let {
                     linkId.value = it.id
                     linkName.value = it.name
                     linkText.value = it.link
                     linkDateOg.value = it.dateOfCreation
                     linkDateMod.value = it.dateOfModified
-                    linkFolder.value = it.folder
+                    linkFolder.value = it.folder.toString()
                     linkProtected.value = it.isProtected
                 }
             }, onLinkClick = { url -> onClickAction.invoke(url) })
 
             for ((key, value) in folderMap.minus(stringResource(id = favoritesStringID))) {
                 ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, onLinklongPressed = {
-                    openBottomSheet.value = true
+                    isBottomSheetOpen.value = true
                     it?.let {
                         linkId.value = it.id
                         linkName.value = it.name
                         linkText.value = it.link
                         linkDateOg.value = it.dateOfCreation
                         linkDateMod.value = it.dateOfModified
-                        linkFolder.value = it.folder
+                        linkFolder.value = it.folder.toString()
                         linkProtected.value = it.isProtected
                     }
                 }, onLinkClick = { url -> onClickAction.invoke(url) })
@@ -84,13 +87,13 @@ fun StartScreen(
                     LazyColumn() {
                         items(list) {
                             LinkCard(it.name, it.link, onLinkLongPressed = {
-                                openBottomSheet.value = true
+                                isBottomSheetOpen.value = true
                                 linkId.value = it.id
                                 linkName.value = it.name
                                 linkText.value = it.link
                                 linkDateOg.value = it.dateOfCreation
                                 linkDateMod.value = it.dateOfModified
-                                linkFolder.value = it.folder
+                                linkFolder.value = it.folder.toString()
                                 linkProtected.value = it.isProtected
                             }, onClickLink = { onClickAction.invoke(it.link) })
                         }
@@ -100,11 +103,11 @@ fun StartScreen(
         }
     }
 
-    if (openBottomSheet.value) {
+    if (isBottomSheetOpen.value) {
         LinkActionsSheet(
             linkFolder.value.equals(stringResource(id = favoritesStringID)),
             onDismissSheet = {
-                openBottomSheet.value = false
+                isBottomSheetOpen.value = false
             },
             onDeleteLink = {
                 onDeleteLink.invoke(
@@ -145,9 +148,39 @@ fun StartScreen(
                         linkProtected.value
                     )
                 )
-                openBottomSheet.value = false
+                isBottomSheetOpen.value = false
                 folderToast(isFavorite = linkFolder.value.equals(stringResource(id = favoritesStringID)), isFolderNameValid = folderNameValid.value)
+            },
+            onAddtoFolder = {
+                isAlertAddFolderOpen.value = true
+                isBottomSheetOpen.value = false
             })
+    }
+    
+    if(isAlertAddFolderOpen.value){
+        AlertDialogAddToFolder(
+            folderName = linkFolder,
+            folderNameValid = folderNameValid,
+            folderList = folderMap.keys,
+            onDismissRequest = { isAlertAddFolderOpen.value = false},
+            onConfirmation =  {
+                addLinktoFolder.value = true
+            })
+    }
+
+    if(addLinktoFolder.value){
+        onAddFavLink.invoke(
+            LinkModel(
+                linkId.value,
+                linkName.value,
+                linkText.value,
+                linkDateOg.value,
+                linkDateMod.value,
+                linkFolder.value,
+                linkProtected.value
+            )
+        )
+        addLinktoFolder.value = false
     }
 }
 
@@ -167,6 +200,7 @@ private fun LinkActionsSheet(
     onShareLink: () -> Unit,
     onEditLink: @Composable() () -> Unit,
     onAddFavLink: @Composable() () -> Unit,
+    onAddtoFolder: @Composable() () -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
@@ -194,7 +228,8 @@ private fun LinkActionsSheet(
             },
             onFavLink = {
                 onAddFavLink.invoke()
-            })
+            },
+            onAddToFolder = {onAddtoFolder.invoke()})
         Spacer(Modifier.height(64.dp))
     }
 }
