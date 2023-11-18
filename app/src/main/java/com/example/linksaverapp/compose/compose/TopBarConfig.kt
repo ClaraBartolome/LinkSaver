@@ -2,6 +2,7 @@ package com.example.linksaverapp.compose.compose
 
 import android.service.autofill.FieldClassification.Match
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.linksaverapp.R
 import com.example.linksaverapp.Utils.LinkScreens
@@ -113,8 +117,10 @@ fun TopAppBarDefault(
                 }
                 LinkScreens.Settings -> {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_settings_outlined),
-                        contentDescription = ""
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = "",
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                        modifier = Modifier.padding(end = 8.dp)
                     )
                 }
                 LinkScreens.Edit -> {
