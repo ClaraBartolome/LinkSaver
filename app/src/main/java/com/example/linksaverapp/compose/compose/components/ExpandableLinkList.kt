@@ -3,7 +3,7 @@ package com.example.linksaverapp.compose.compose.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +43,7 @@ fun ExpandableLinkList(
             }
         }
         item {
-            Divider(color = MaterialTheme.colors.primaryVariant, thickness = 1.dp)
+            Divider(color = MaterialTheme.colorScheme.onPrimary, thickness = 1.dp)
         }
     }
 }

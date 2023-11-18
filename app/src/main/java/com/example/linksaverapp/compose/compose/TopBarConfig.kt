@@ -1,8 +1,10 @@
 package com.example.linksaverapp.compose.compose
 
+import android.service.autofill.FieldClassification.Match
 import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -125,7 +127,8 @@ fun TopAppBarDefault(
                 }
                 else -> {}
             }
-        }
+        },
+        backgroundColor = MaterialTheme.colorScheme.primary
     )
 }
 
@@ -134,19 +137,20 @@ private fun IconButtonApp(iconId: Int, action: () -> (Unit), contentDescription:
     IconButton(onClick = action) {
         Icon(
             painter = painterResource(id = iconId),
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
 
 @Composable
 private fun TitleText(screen: LinkScreens) {
-    when (screen) {
-        LinkScreens.Start -> Text("GuardaLinks")
-        LinkScreens.Add -> Text("Añade un Link")
-        LinkScreens.Edit -> Text("Edita un Link")
-        LinkScreens.Settings -> Text("Configuración")
-        else -> Text("GuardaLinks")
+    val title = when (screen) {
+        LinkScreens.Start -> "GuardaLinks"
+        LinkScreens.Add -> "Añade un Link"
+        LinkScreens.Edit -> "Edita un Link"
+        LinkScreens.Settings -> "Configuración"
+        else -> "GuardaLinks"
     }
-
+    Text("GuardaLinks", color = MaterialTheme.colorScheme.onPrimary)
 }

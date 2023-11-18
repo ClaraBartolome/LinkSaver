@@ -3,6 +3,7 @@ package com.example.linksaverapp.compose.compose
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateMapOf
@@ -77,7 +78,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
-        color = MaterialTheme.colors.primary
+        color = MaterialTheme.colorScheme.primary
     )
     
     viewHelperVar.favoritesString = stringResource(id = favoritesStringID)

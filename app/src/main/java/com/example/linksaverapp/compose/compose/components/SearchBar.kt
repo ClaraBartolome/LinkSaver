@@ -13,7 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -68,7 +68,7 @@ fun SearchBar(
                             .fillMaxWidth(),
                         shape = RectangleShape,
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colors.background,
+                            containerColor = MaterialTheme.colorScheme.background,
                         ),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
@@ -96,7 +96,7 @@ private fun SearchBarConfig(
             .height(60.dp)
             .fillMaxWidth(),
         tonalElevation = AppBarDefaults.TopAppBarElevation,
-        color = MaterialTheme.colors.primary
+        color = MaterialTheme.colorScheme.primary
     ) {
         TextField(
             value = text.value,
@@ -139,18 +139,21 @@ private fun SearchBarConfig(
                 focusedContainerColor = whiteAlfaLow,
                 unfocusedContainerColor = whiteAlfaLow,
                 disabledContainerColor = whiteAlfaLow,
-                cursorColor = MaterialTheme.colors.primaryVariant,
+                cursorColor = MaterialTheme.colorScheme.primary,
                 disabledIndicatorColor = Color.Transparent,
                 errorIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                disabledTextColor = MaterialTheme.colorScheme.onPrimary
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(all = 4.dp)
                 .border(1.dp, Color.White, CircleShape),
             shape = CircleShape,
-            textStyle = MaterialTheme.typography.body1
+            textStyle = MaterialTheme.typography.bodyLarge
         )
     }
 }
@@ -161,21 +164,21 @@ fun ItemSearchSuggestion(linkName: String, link: String, onClick: (String) -> Un
         .clickable { onClick(link) }) {
         Text(
             linkName,
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp, horizontal = 8.dp)
         )
         Text(
             text = link,
-            style = MaterialTheme.typography.subtitle2,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp, horizontal = 8.dp),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        Divider(color = MaterialTheme.colors.primaryVariant, thickness = 1.dp)
+        Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
     }
 }
 
