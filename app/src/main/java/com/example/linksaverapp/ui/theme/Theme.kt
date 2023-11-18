@@ -23,8 +23,10 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.White,
     primaryContainer = lightGreen,
     onPrimaryContainer = Color.Black,
-    surface = Color.White,
-    onSurface = Color.Black
+    surface = Color.Black,
+    onSurface = Color.White,
+    background = Color.Black,
+    onBackground = Color.White
 // ..
 )
 
