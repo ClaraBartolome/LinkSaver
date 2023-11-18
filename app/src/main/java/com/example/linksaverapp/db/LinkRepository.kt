@@ -69,4 +69,10 @@ class LinkRepository (private val linkSaverDao: LinkSaverDao) {
         linkSaverDao.deleteLink(link)
     }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteListLink(linkList: List<LinkModel>) {
+        linkSaverDao.deleteListLink(linkList)
+    }
+
 }

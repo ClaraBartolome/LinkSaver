@@ -21,10 +21,15 @@ class LinkSaverViewModel(private val repository: LinkRepository) : ViewModel() {
         repository.deleteLink(link)
     }
 
+    fun deleteListLink(linkList: List<LinkModel>)= viewModelScope.launch{
+        repository.deleteListLink(linkList = linkList)
+    }
+
     fun updateLink(link:LinkModel)= viewModelScope.launch{
         repository.updateLink(link)
     }
 
+    //region ORDER
     fun getAllLinksByNameAsc() = viewModelScope.launch{
         repository.getAllLinksByNameAsc()
     }
@@ -48,6 +53,8 @@ class LinkSaverViewModel(private val repository: LinkRepository) : ViewModel() {
     fun getAllLinksByDateOfModifiedDesc() = viewModelScope.launch{
         repository.getAllLinksByDateOfModifiedDesc()
     }
+
+    //endregion
 
 }
 

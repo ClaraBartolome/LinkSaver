@@ -21,6 +21,9 @@ interface LinkSaverDao {
     @Delete
     suspend fun deleteLink(link: LinkModel)
 
+    @Delete
+    suspend fun deleteListLink(linkList: List<LinkModel>)
+
     @Query("DELETE FROM link_table")
     suspend fun deleteAll()
 
