@@ -1,13 +1,22 @@
 package com.example.linksaverapp.Utils
 
+import androidx.compose.ui.graphics.Color
 import com.example.linksaverapp.R
+import com.example.linksaverapp.ui.theme.darkGreen
+import com.example.linksaverapp.ui.theme.darkRed
+import com.example.linksaverapp.ui.theme.green100
+import com.example.linksaverapp.ui.theme.mediumGreen
+import com.example.linksaverapp.ui.theme.mediumRed
+import com.example.linksaverapp.ui.theme.red100
 
 enum class LinkScreens(){
     Start,
     Add,
     Settings,
     SortingConfig,
-    Edit
+    Edit,
+    ChangeColor,
+    AboutApp
 }
 
 enum class BottomBarOption(){
@@ -32,6 +41,16 @@ enum class SortRadioOptions(val text: String){
     ModDateNewFirst("Fecha de modificacion (Más recientes primero"),
     ModDateOldFirst("Fecha de modificación (Más antiguos primero"),
 }
+
+enum class ColorThemeOptions(val lightColor: Color, val containerLightColor: Color, val darkColor: Color ){
+    Green(lightColor = mediumGreen, containerLightColor = green100, darkColor = darkGreen),
+    Red(lightColor = mediumRed, containerLightColor = red100, darkColor = darkRed)
+}
+
+val colorOptions = listOf(
+    ColorThemeOptions.Green,
+    ColorThemeOptions.Red
+)
 
 val radioOptions = listOf(
     SortRadioOptions.NameAZ,

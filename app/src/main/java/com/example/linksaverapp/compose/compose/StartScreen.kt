@@ -39,7 +39,8 @@ fun StartScreen(
     onAddFavLink: @Composable (LinkModel) -> Unit,
     folderNameValid: MutableState<Boolean>,
     onShareLink: (String, String) -> Unit,
-    onClickAction: (String) -> Unit
+    onClickAction: (String) -> Unit,
+    onCopyLink: (String) -> Unit
 ) {
     val linkId = remember { mutableStateOf(0) }
     val linkName = remember { mutableStateOf("") }
@@ -57,21 +58,7 @@ fun StartScreen(
                 FolderHeaderType.Favorite,
                 number = folderMap[stringResource(id = favoritesStringID)]?.size ?: 0,
                 isDeviceUnlocked = isDeviceUnlocked,
-                onLinklongPressed = {
-                isBottomSheetOpen.value = true
-                it?.let {
-                    linkId.value = it.id
-                    linkName.value = it.name
-                    linkText.value = it.link
-                    linkDateOg.value = it.dateOfCreation
-                    linkDateMod.value = it.dateOfModified
-                    linkFolder.value = it.folder.toString()
-                    linkProtected.value = it.isProtected
-                }
-            }, onLinkClick = { url -> onClickAction.invoke(url) })
-
-            for ((key, value) in folderMap.minus(stringResource(id = favoritesStringID))) {
-                ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, isDeviceUnlocked = isDeviceUnlocked, onLinklongPressed = {
+                onLinkLongPressed = { onCopyLink.invoke(linkText.value)} , onLinkClick = { url -> onClickAction.invoke(url) }, onOptionsPressed =  {
                     isBottomSheetOpen.value = true
                     it?.let {
                         linkId.value = it.id
@@ -82,23 +69,39 @@ fun StartScreen(
                         linkFolder.value = it.folder.toString()
                         linkProtected.value = it.isProtected
                     }
-                }, onLinkClick = { url -> onClickAction.invoke(url) })
+                })
+
+            for ((key, value) in folderMap.minus(stringResource(id = favoritesStringID))) {
+                ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, isDeviceUnlocked = isDeviceUnlocked, onLinkLongPressed =  { onCopyLink.invoke(linkText.value)}
+                , onLinkClick = { url -> onClickAction.invoke(url) },
+                    onOptionsPressed = {
+                        isBottomSheetOpen.value = true
+                        it?.let {
+                            linkId.value = it.id
+                            linkName.value = it.name
+                            linkText.value = it.link
+                            linkDateOg.value = it.dateOfCreation
+                            linkDateMod.value = it.dateOfModified
+                            linkFolder.value = it.folder.toString()
+                            linkProtected.value = it.isProtected
+                        }})
             }
             if (folderMap.containsKey("") && folderMap[""] != null) {
                 folderMap[""]?.let { list ->
                     LazyColumn {
                         items(list) {
                             if(it.isProtected == 0 || isDeviceUnlocked.value){
-                                LinkCard(it.name, it.link, onLinkLongPressed = {
-                                    isBottomSheetOpen.value = true
-                                    linkId.value = it.id
-                                    linkName.value = it.name
-                                    linkText.value = it.link
-                                    linkDateOg.value = it.dateOfCreation
-                                    linkDateMod.value = it.dateOfModified
-                                    linkFolder.value = it.folder.toString()
-                                    linkProtected.value = it.isProtected
-                                }, onClickLink = { onClickAction.invoke(it.link) })
+                                LinkCard(it.name, it.link, onLinkLongPressed = { onCopyLink.invoke(linkText.value)}, onClickLink = { onClickAction.invoke(it.link) },
+                                   onOptionsPressed = {
+                                       isBottomSheetOpen.value = true
+                                       linkId.value = it.id
+                                       linkName.value = it.name
+                                       linkText.value = it.link
+                                       linkDateOg.value = it.dateOfCreation
+                                       linkDateMod.value = it.dateOfModified
+                                       linkFolder.value = it.folder.toString()
+                                       linkProtected.value = it.isProtected
+                                   })
                             }
                         }
                     }
@@ -162,6 +165,7 @@ fun StartScreen(
     }
     
     if(isAlertAddFolderOpen.value){
+        folderNameValid.value = true
         AlertDialogAddToFolder(
             folderName = linkFolder,
             folderNameValid = folderNameValid,

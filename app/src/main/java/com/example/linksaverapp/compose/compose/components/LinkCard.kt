@@ -16,13 +16,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,17 +38,20 @@ fun LinkCard(
     title: String = "",
     link: String = "",
     onLinkLongPressed: () -> Unit,
+    onOptionsPressed: () -> Unit,
     onClickLink: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxSize()
-            /*.background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(10.dp))*/,
+            .background(Color.Transparent)
+            .fillMaxSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
-            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
+            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = Color.Transparent,
+            disabledContentColor = Color.Transparent
         )
     ) {
         Row(modifier = Modifier
@@ -79,7 +83,7 @@ fun LinkCard(
             Column(modifier = Modifier
                 .fillMaxHeight()
                 .padding(start = 8.dp)
-                .clickable { onLinkLongPressed.invoke() }){
+                .clickable { onOptionsPressed.invoke() }){
                 Image(painter = painterResource(id = R.drawable.ic_more), contentDescription = "", modifier = Modifier
                     .size(32.dp), colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                 )
@@ -94,7 +98,7 @@ fun DefaultPreview() {
     LinkSaverAppTheme {
         LazyColumn() {
             items(5) {
-                LinkCard("Name", "https://stackoverflow.com/questions/68626940/customise-focussed-indicator-line-android-compose-textfield", {}, {})
+                LinkCard("Name", "https://stackoverflow.com/questions/68626940/customise-focussed-indicator-line-android-compose-textfield", {}, {}, {})
             }
         }
     }

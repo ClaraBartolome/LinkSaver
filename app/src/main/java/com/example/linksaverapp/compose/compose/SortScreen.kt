@@ -29,7 +29,8 @@ fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: Lis
         Text(
             text = "Ordenar por:",
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(start = 16.dp)
+            modifier = Modifier.padding(start = 16.dp),
+            color = MaterialTheme.colorScheme.onBackground,
         )
         radioOptions.forEach { option ->
             Row(
@@ -54,7 +55,8 @@ fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: Lis
                 Text(
                     text = option.text,
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 16.dp)
+                    modifier = Modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }

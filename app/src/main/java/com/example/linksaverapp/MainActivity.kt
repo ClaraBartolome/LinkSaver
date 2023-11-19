@@ -7,8 +7,11 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
+import com.example.linksaverapp.Utils.ColorThemeOptions
 import com.example.linksaverapp.compose.compose.CreateUI
 import com.example.linksaverapp.db.LinksSaverApplication
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
@@ -24,13 +27,14 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LinkSaverAppTheme () {
+            val isDarkTheme = remember { mutableStateOf(false) }
+            val colorChosen = remember { mutableStateOf(ColorThemeOptions.Green) }
+            LinkSaverAppTheme (darkTheme = isDarkTheme.value, color = colorChosen.value) {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    CreateUI(linkSaverViewModel)
+                    CreateUI(linkSaverViewModel, isDarkTheme = isDarkTheme, colorChosen = colorChosen)
                 }
             }
         }

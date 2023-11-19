@@ -1,17 +1,16 @@
 package com.example.linksaverapp.compose.compose
 
-import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -23,11 +22,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.linksaverapp.LinkSaverViewModel
+import com.example.linksaverapp.Utils.ColorThemeOptions
 import com.example.linksaverapp.Utils.LinkScreens
+import com.example.linksaverapp.Utils.colorOptions
 import com.example.linksaverapp.Utils.favoritesStringID
 import com.example.linksaverapp.Utils.radioOptions
 import com.example.linksaverapp.compose.DeleteLink
 import com.example.linksaverapp.compose.SortTree
+import com.example.linksaverapp.compose.copyToClipboard
 import com.example.linksaverapp.compose.getDate
 import com.example.linksaverapp.compose.insertLink
 import com.example.linksaverapp.compose.openLink
@@ -44,7 +46,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 val TAG = "START_SCREEN"
 
 @Composable
-fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
+fun CreateUI(linkSaverViewModel: LinkSaverViewModel, isDarkTheme: MutableState<Boolean>, colorChosen: MutableState<ColorThemeOptions>) {
     val navController = rememberNavController()
     val ctx = LocalContext.current
     val activity = ctx as FragmentActivity
@@ -137,7 +139,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                 onCloseClicked = { isSearchOpen.value = false }
             )
         },
-        backgroundColor = MaterialTheme.colorScheme.background
+        backgroundColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -180,7 +182,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                         )
                         SortTree(option = selectedOption.value, linkSaverViewModel = linkSaverViewModel)
                     },
-                    folderNameValid = isFolderNameValid
+                    folderNameValid = isFolderNameValid,
+                    onCopyLink = {link -> copyToClipboard(link, ctx, activity) }
                 )
             }
             composable(route = LinkScreens.Add.name) {
@@ -219,7 +222,19 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             composable(route = LinkScreens.Settings.name) {
                 screen.value = LinkScreens.Settings
                 Settings(
-                    onWatchProtectedLinks = { validatePassword(context = ctx, activity = activity, executor = executor, isDeviceUnlocked) })
+                    isDarkTheme = isDarkTheme,
+                    onWatchProtectedLinks = { validatePassword(context = ctx, activity = activity, executor = executor, isDeviceUnlocked) },
+                    onSelectAppColor = {navController.navigate(LinkScreens.ChangeColor.name)},
+                    onClickAboutApp = {navController.navigate(LinkScreens.AboutApp.name)}
+                    )
+            }
+            composable(route = LinkScreens.ChangeColor.name) {
+                screen.value = LinkScreens.ChangeColor
+                SelectAppColorScreen(colorChosen = colorChosen, colorOptions = colorOptions)
+            }
+            composable(route = LinkScreens.AboutApp.name) {
+                screen.value = LinkScreens.AboutApp
+                AboutAppScreen()
             }
         }
         if (isAlertOpen.value) {

@@ -1,6 +1,8 @@
 package com.example.linksaverapp.compose
 
 import android.app.KeyguardManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -12,7 +14,6 @@ import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.SortRadioOptions
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.Executor
+
 
 object viewHelperVar{
     var favoritesString = ""
@@ -71,8 +73,19 @@ private fun validateFolderName(name: String?, folderMap: MutableMap<String, Muta
     return true
 }
 
+fun copyToClipboard(text: String, context: Context, activity: FragmentActivity){
+    val clipboard: ClipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("Simple text", text)
+    clipboard.setPrimaryClip(clip)
+}
+
 @Composable
-fun validatePassword(context: Context, activity: FragmentActivity, executor: Executor, isDeviceUnlocked: MutableState<Boolean>,){
+fun validatePassword(
+    context: Context,
+    activity: FragmentActivity,
+    executor: Executor,
+    isDeviceUnlocked: MutableState<Boolean>
+){
     if(isDeviceSecured(context) && !isDeviceUnlocked.value){
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("title")
@@ -93,14 +106,14 @@ fun validatePassword(context: Context, activity: FragmentActivity, executor: Exe
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    Toast.makeText(context, "succeeded!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "succeeded!", Toast.LENGTH_SHORT).show()
                     isDeviceUnlocked.value = true
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
                     Toast.makeText(
-                        context, "failed", Toast.LENGTH_LONG
+                        context, "failed", Toast.LENGTH_SHORT
                     ).show()
                 }
             }

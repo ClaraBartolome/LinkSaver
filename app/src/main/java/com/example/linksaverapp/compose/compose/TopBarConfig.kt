@@ -1,13 +1,12 @@
 package com.example.linksaverapp.compose.compose
 
-import android.service.autofill.FieldClassification.Match
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -80,7 +79,7 @@ fun TopAppBarDefault(
                         action = { navController.navigate(LinkScreens.Settings.name) })
                 }
 
-                LinkScreens.Settings, LinkScreens.SortingConfig -> {
+                LinkScreens.Settings, LinkScreens.SortingConfig, LinkScreens.ChangeColor, LinkScreens.AboutApp -> {
                     IconButtonApp(
                         iconId = R.drawable.ic_arrow_back,
                         action = { navController.popBackStack() })

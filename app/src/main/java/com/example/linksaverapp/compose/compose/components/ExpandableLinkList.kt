@@ -3,8 +3,8 @@ package com.example.linksaverapp.compose.compose.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +22,8 @@ fun ExpandableLinkList(
     folderHeaderType: FolderHeaderType,
     number: Int = 0,
     isDeviceUnlocked: MutableState<Boolean>,
-    onLinklongPressed: (LinkModel?)-> Unit,
+    onLinkLongPressed: (String)-> Unit,
+    onOptionsPressed: (LinkModel?)-> Unit,
     onLinkClick: (String) -> Unit
 ) {
     val expandedState = remember { mutableStateOf(false) }
@@ -40,12 +41,19 @@ fun ExpandableLinkList(
         if (expandedState.value) {
             item {
                 folderList.forEach {
-                    LinkCard(it.name, it.link, onLinkLongPressed = {onLinklongPressed.invoke(it)}, onClickLink = {onLinkClick(it.link)})
+                    if(it.isProtected == 0 || isDeviceUnlocked.value) {
+                        LinkCard(
+                            it.name,
+                            it.link,
+                            onLinkLongPressed = { onLinkLongPressed.invoke(it.link) },
+                            onClickLink = { onLinkClick(it.link) },
+                            onOptionsPressed = {onOptionsPressed(it)})
+                    }
                 }
             }
         }
         item {
-            Divider(color = MaterialTheme.colorScheme.onPrimary, thickness = 1.dp)
+            Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
         }
     }
 }
@@ -57,7 +65,7 @@ fun DefaultExpandableListPreview() {
         ExpandableLinkList(folderName = "Favoritos",
             mutableListOf(
                 LinkModel(name= "Buzzfeed"),
-            ), FolderHeaderType.Favorite, 0, remember { mutableStateOf(false) }, {}, {}
+            ), FolderHeaderType.Favorite, 0, remember { mutableStateOf(false) }, {}, {}, {}
         )
     }
 }

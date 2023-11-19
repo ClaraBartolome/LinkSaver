@@ -49,7 +49,7 @@ fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: Fold
                 painter = painterResource(id = getIcon(type)),
                 contentDescription = "",
                 modifier = Modifier.padding(start = 8.dp),
-                colorFilter = ColorFilter.tint(color = if(type == FolderHeaderType.Favorite) softPink else getColor())
+                colorFilter = ColorFilter.tint(color = if(type == FolderHeaderType.Favorite) softPink else MaterialTheme.colorScheme.onBackground)
             )
             Text(
                 modifier = Modifier
@@ -86,13 +86,6 @@ fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: Fold
             }
         }
     }
-}
-
-@Composable
-private fun getColor(): Color {
-    return if (isSystemInDarkTheme()) {
-        Color.White
-    } else Color.Black
 }
 
 private fun getIcon(name: FolderHeaderType): Int{
