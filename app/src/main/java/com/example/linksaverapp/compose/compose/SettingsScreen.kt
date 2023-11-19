@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,29 +40,36 @@ import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
-fun Settings() {
+fun Settings(onWatchProtectedLinks: @Composable () -> Unit) {
+    val shouldShowResult = remember {
+        mutableStateOf(false)
+    }
     LazyColumn(){
         item {
-            ItemSetting(text = "Reestablecer valores predeterminados", icon = Icons.Outlined.Refresh, {})
+            ItemSetting(text = "Reestablecer valores predeterminados", icon = Icons.Outlined.Refresh, {}, remember {
+                mutableStateOf(false)
+            })
         }
         item {
-            ItemSetting(text = "Ver enlaces ocultos", icon = Icons.Outlined.Lock, {})
+            ItemSetting(text = "Ver enlaces ocultos", icon = Icons.Outlined.Lock, { onWatchProtectedLinks.invoke()}, shouldShowResult)
         }
         item {
-            ItemSettingSwitch(text = "Modo nocturno", icon = Icons.Outlined.Lock, {})
+            ItemSettingSwitch(text = "Modo nocturno", icon = Icons.Outlined.Lock, {}, )
         }
         item {
             ItemSettingColor(text = "Cambiar esquema de color", icon = Icons.Outlined.Create, {})
         }
         item {
-            ItemSetting(text = "Acerca de...", icon = Icons.Outlined.Info, {})
+            ItemSetting(text = "Acerca de...", icon = Icons.Outlined.Info, {}, remember {
+                mutableStateOf(false)
+            })
         }
     }
 }
 
 @Composable
-private fun ItemSetting(text: String, icon: ImageVector, onClick: () -> Unit){
-    Column (modifier = Modifier.clickable { onClick.invoke() }) {
+private fun ItemSetting(text: String, icon: ImageVector, onClick:@Composable () -> Unit, showResult: MutableState<Boolean>){
+    Column (modifier = Modifier.clickable { showResult.value = true }) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -73,6 +81,10 @@ private fun ItemSetting(text: String, icon: ImageVector, onClick: () -> Unit){
                 style = MaterialTheme.typography.titleMedium)
         }
         Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+    }
+    if (showResult.value) {
+        onClick.invoke()
+        showResult.value = false
     }
 }
 
@@ -134,6 +146,6 @@ private fun ItemSettingSwitch(text: String, icon: ImageVector, onClick: () -> Un
 @Composable
 private fun AddLinkScreenPreview() {
     LinkSaverAppTheme {
-        Settings()
+        Settings({})
     }
 }

@@ -1,5 +1,6 @@
 package com.example.linksaverapp.compose.compose
 
+import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,6 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,6 +34,7 @@ import com.example.linksaverapp.compose.shareLink
 import com.example.linksaverapp.compose.sortFolderList
 import com.example.linksaverapp.compose.sortedLinkList
 import com.example.linksaverapp.compose.updateLink
+import com.example.linksaverapp.compose.validatePassword
 import com.example.linksaverapp.compose.viewHelperVar
 import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
@@ -42,6 +46,8 @@ val TAG = "START_SCREEN"
 fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val navController = rememberNavController()
     val ctx = LocalContext.current
+    val activity = ctx as FragmentActivity
+    val executor = ContextCompat.getMainExecutor(activity)
     val lifecycleOwner = LocalLifecycleOwner.current
     val links = linkSaverViewModel.allLinks.observeAsState()
     val screen = remember { mutableStateOf(LinkScreens.Start) }
@@ -61,6 +67,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
     val linkModel = remember { mutableStateOf(LinkModel()) }
     val isLinkModelValid = remember { mutableStateOf(true) }
     val isFolderNameValid = remember { mutableStateOf(true) }
+    val isDeviceUnlocked = remember { mutableStateOf(false) }
 
     //Bottomsheet
     val isSheetOpen = remember { mutableStateOf(false) }
@@ -143,6 +150,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
                     folderMap = linkList,
                     isBottomSheetOpen = isSheetOpen,
                     isAlertAddFolderOpen = isAlertAddFolderOpen,
+                    isDeviceUnlocked = isDeviceUnlocked,
                     onDeleteLink = { link ->
                         DeleteLink(linkSaverViewModel = linkSaverViewModel, link = link)
                         SortTree(
@@ -208,7 +216,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel) {
             }
             composable(route = LinkScreens.Settings.name) {
                 screen.value = LinkScreens.Settings
-                Settings()
+                Settings(
+                    onWatchProtectedLinks = { validatePassword(context = ctx, activity = activity, executor = executor, isDeviceUnlocked) })
             }
         }
         if (isAlertOpen.value) {

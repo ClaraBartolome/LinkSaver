@@ -1,13 +1,19 @@
 package com.example.linksaverapp.compose
 
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentActivity
 import com.example.linksaverapp.LinkSaverViewModel
 import com.example.linksaverapp.Utils.SortRadioOptions
 import com.example.linksaverapp.compose.compose.TAG
@@ -17,6 +23,7 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.concurrent.Executor
 
 object viewHelperVar{
     var favoritesString = ""
@@ -64,6 +71,54 @@ private fun validateFolderName(name: String?, folderMap: MutableMap<String, Muta
     return true
 }
 
+@Composable
+fun validatePassword(context: Context, activity: FragmentActivity, executor: Executor, isDeviceUnlocked: MutableState<Boolean>,){
+    if(isDeviceSecured(context) && !isDeviceUnlocked.value){
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("title")
+            .setSubtitle("subtitle")
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+            .build()
+
+        val biometricPrompt = BiometricPrompt(activity, executor,
+            object: BiometricPrompt.AuthenticationCallback(){
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    Toast.makeText(
+                        context,
+                        "error",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    Toast.makeText(context, "succeeded!", Toast.LENGTH_LONG).show()
+                    isDeviceUnlocked.value = true
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    Toast.makeText(
+                        context, "failed", Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        )
+
+        biometricPrompt.authenticate(promptInfo)
+    }else{
+        val text = if(isDeviceUnlocked.value) "Terminal desbloqueado" else "Configura una contraseña en el terminal para proteger los enlaces con contraseña"
+        Toast.makeText(
+            context, text, Toast.LENGTH_LONG
+        ).show()
+    }
+}
+
+private fun isDeviceSecured(context: Context): Boolean {
+    val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    return keyguardManager.isKeyguardSecure
+}
 
 fun getDate(): String {
     val time = Calendar.getInstance().time

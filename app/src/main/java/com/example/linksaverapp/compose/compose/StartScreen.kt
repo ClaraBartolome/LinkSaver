@@ -33,6 +33,7 @@ fun StartScreen(
     folderMap: MutableMap<String, MutableList<LinkModel>>,
     isBottomSheetOpen: MutableState<Boolean>,
     isAlertAddFolderOpen: MutableState<Boolean>,
+    isDeviceUnlocked: MutableState<Boolean>,
     onDeleteLink: @Composable() (LinkModel) -> Unit,
     onEditLink: @Composable() (LinkModel) -> Unit,
     onAddFavLink: @Composable() (LinkModel) -> Unit,
@@ -55,6 +56,7 @@ fun StartScreen(
                 folderList = folderMap[stringResource(id = favoritesStringID)]?: mutableListOf(),
                 FolderHeaderType.Favorite,
                 number = folderMap[stringResource(id = favoritesStringID)]?.size ?: 0,
+                isDeviceUnlocked = isDeviceUnlocked,
                 onLinklongPressed = {
                 isBottomSheetOpen.value = true
                 it?.let {
@@ -69,7 +71,7 @@ fun StartScreen(
             }, onLinkClick = { url -> onClickAction.invoke(url) })
 
             for ((key, value) in folderMap.minus(stringResource(id = favoritesStringID))) {
-                ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, onLinklongPressed = {
+                ExpandableLinkList(folderName = key, folderList = value, FolderHeaderType.Normal, isDeviceUnlocked = isDeviceUnlocked, onLinklongPressed = {
                     isBottomSheetOpen.value = true
                     it?.let {
                         linkId.value = it.id
@@ -86,16 +88,18 @@ fun StartScreen(
                 folderMap[""]?.let { list ->
                     LazyColumn() {
                         items(list) {
-                            LinkCard(it.name, it.link, onLinkLongPressed = {
-                                isBottomSheetOpen.value = true
-                                linkId.value = it.id
-                                linkName.value = it.name
-                                linkText.value = it.link
-                                linkDateOg.value = it.dateOfCreation
-                                linkDateMod.value = it.dateOfModified
-                                linkFolder.value = it.folder.toString()
-                                linkProtected.value = it.isProtected
-                            }, onClickLink = { onClickAction.invoke(it.link) })
+                            if(it.isProtected == 0 || isDeviceUnlocked.value){
+                                LinkCard(it.name, it.link, onLinkLongPressed = {
+                                    isBottomSheetOpen.value = true
+                                    linkId.value = it.id
+                                    linkName.value = it.name
+                                    linkText.value = it.link
+                                    linkDateOg.value = it.dateOfCreation
+                                    linkDateMod.value = it.dateOfModified
+                                    linkFolder.value = it.folder.toString()
+                                    linkProtected.value = it.isProtected
+                                }, onClickLink = { onClickAction.invoke(it.link) })
+                            }
                         }
                     }
                 }
