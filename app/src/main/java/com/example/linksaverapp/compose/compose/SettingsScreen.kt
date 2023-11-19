@@ -1,20 +1,15 @@
 package com.example.linksaverapp.compose.compose
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
@@ -33,15 +28,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
 fun Settings(onWatchProtectedLinks: @Composable () -> Unit) {
-    val shouldShowResult = remember {
+    val applyValidatePassword = remember {
+        mutableStateOf(false)
+    }
+    val isSwitchChecked = remember {
         mutableStateOf(false)
     }
     LazyColumn(){
@@ -51,10 +47,10 @@ fun Settings(onWatchProtectedLinks: @Composable () -> Unit) {
             })
         }
         item {
-            ItemSetting(text = "Ver enlaces ocultos", icon = Icons.Outlined.Lock, { onWatchProtectedLinks.invoke()}, shouldShowResult)
+            ItemSetting(text = "Ver enlaces ocultos", icon = Icons.Outlined.Lock, { onWatchProtectedLinks.invoke()}, applyValidatePassword)
         }
         item {
-            ItemSettingSwitch(text = "Modo nocturno", icon = Icons.Outlined.Lock, {}, )
+            ItemSettingSwitch(text = "Modo nocturno", icon = Icons.Outlined.Lock, {}, isSwitchChecked)
         }
         item {
             ItemSettingColor(text = "Cambiar esquema de color", icon = Icons.Outlined.Create, {})
@@ -78,7 +74,8 @@ private fun ItemSetting(text: String, icon: ImageVector, onClick:@Composable () 
             Text(
                 text = text,
                 modifier = Modifier.padding(start = 8.dp),
-                style = MaterialTheme.typography.titleMedium)
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground,)
         }
         Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
     }
@@ -102,7 +99,8 @@ private fun ItemSettingColor(text: String, icon: ImageVector, onClick: () -> Uni
                 Text(
                     text = text,
                     modifier = Modifier.padding(start = 8.dp),
-                    style = MaterialTheme.typography.titleMedium)
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,)
             }
 
             Icon(imageVector =  Icons.Default.Favorite , contentDescription = "", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(end = 16.dp))
@@ -112,8 +110,11 @@ private fun ItemSettingColor(text: String, icon: ImageVector, onClick: () -> Uni
 }
 
 @Composable
-private fun ItemSettingSwitch(text: String, icon: ImageVector, onClick: () -> Unit){
-    Column (modifier = Modifier.clickable { onClick.invoke() }) {
+private fun ItemSettingSwitch(text: String, icon: ImageVector, onClick: () -> Unit,  switchChecked: MutableState<Boolean>){
+    Column (modifier = Modifier.clickable {
+        onClick.invoke()
+        switchChecked.value = !switchChecked.value
+    }) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -125,15 +126,13 @@ private fun ItemSettingSwitch(text: String, icon: ImageVector, onClick: () -> Un
                 Text(
                     text = text,
                     modifier = Modifier.padding(start = 8.dp),
-                    style = MaterialTheme.typography.titleMedium)
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,)
             }
-
-            var checked by remember { mutableStateOf(true) }
-
             Switch(
-                checked = checked,
+                checked = switchChecked.value,
                 onCheckedChange = {
-                    checked = it
+                    switchChecked.value = it
                 },
                 modifier = Modifier.scale(0.75f)
             )

@@ -17,3 +17,4 @@ val whiteAlfaMedium = Color(0x80FFFFFF)
 val whiteAlfaLow = Color(0x40FFFFFF)
 
 val softPink = Color(0xFFF48FB1)
+

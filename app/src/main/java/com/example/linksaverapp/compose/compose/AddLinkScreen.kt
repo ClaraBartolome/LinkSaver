@@ -111,7 +111,7 @@ fun AddLinkScreen(
 
         Text("Si dejas el siguiente campo en blanco no se asignará a ninguna carpeta",
             fontSize = 12.sp,
-            color = getColor(),
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(top = 4.dp))
 
         LazyColumn(){
@@ -193,7 +193,7 @@ fun AddLinkScreen(
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(top = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-            Text("¿Es un link privado?")
+            Text("¿Es un link privado?", color = MaterialTheme.colorScheme.onBackground)
             ElevatedButton(onClick = { isProtected.value = !isProtected.value }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
                 Text(if(isProtected.value)"Invisible" else "Visible", modifier = Modifier.padding(end = 8.dp), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.bodyLarge)
                 Image(painter = painterResource(id = if(isProtected.value)R.drawable.ic_visibility_off else R.drawable.ic_visibility_on), contentDescription = "", colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary))
@@ -214,7 +214,7 @@ private fun OutlinedTextFieldCustom(
     val focusManager = LocalFocusManager.current
     OutlinedTextField(value = valueText.value,
         onValueChange = {onValueChange.invoke(it)},
-        label = { Text(labelText, color = if(!linkModelValid.value && valueText.value.isBlank()) Color.Red else getColor()) },
+        label = { Text(labelText, color = if(!linkModelValid.value && valueText.value.isBlank()) Color.Red else MaterialTheme.colorScheme.onBackground) },
         singleLine = true,
         supportingText = { if(!linkModelValid.value && valueText.value.isBlank()) {Text(supportingText, fontSize = 12.sp, color = Color.Red)} },
         isError = !linkModelValid.value && valueText.value.isBlank(),
@@ -234,12 +234,12 @@ private fun OutlinedTextFieldCustom(
         trailingIcon = {
             if (showClearButton.value) {
                 IconButton(onClick = { valueText.value = ""}) {
-                    Icon(imageVector = Icons.Filled.Clear, contentDescription = "Clear", tint = getColor())
+                    Icon(imageVector = Icons.Filled.Clear, contentDescription = "Clear", tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
 
         },
-        textStyle = TextStyle(fontSize = 16.sp, color = getColor())
+        textStyle = TextStyle(fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
     )
 }
 
@@ -256,7 +256,7 @@ fun OutlinedTextFieldFolderCustom(
     val focusManager = LocalFocusManager.current
     OutlinedTextField(value = valueText.value,
         onValueChange = { onValueChange.invoke(it) },
-        label = { Text("Carpeta", color = getColor())},
+        label = { Text("Carpeta", color = MaterialTheme.colorScheme.onBackground)},
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -272,10 +272,10 @@ fun OutlinedTextFieldFolderCustom(
         ),
         trailingIcon = {
             IconButton(onClick = { onClickIcon.invoke(showClearButton.value)}) {
-                Icon(imageVector = if(showClearButton.value)Icons.Filled.Clear else Icons.Filled.ArrowDropDown, contentDescription = "Clear", tint = getColor())
+                Icon(imageVector = if(showClearButton.value)Icons.Filled.Clear else Icons.Filled.ArrowDropDown, contentDescription = "Clear", tint = MaterialTheme.colorScheme.onBackground)
             }
         },
-        textStyle = TextStyle(fontSize = 16.sp, color = getColor())
+        textStyle = TextStyle(fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
     )
 }
 
@@ -283,7 +283,7 @@ fun OutlinedTextFieldFolderCustom(
 fun ItemFolderSuggestion(folderName:String, onClick: (String) -> Unit){
     Row(modifier = Modifier
         .clickable { onClick(folderName) }){
-        Text(folderName, color = getColor(), modifier = Modifier
+        Text(folderName, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 8.dp))
     }
@@ -291,11 +291,6 @@ fun ItemFolderSuggestion(folderName:String, onClick: (String) -> Unit){
 
 private fun getName(url: String): String{
     return if(isValidUrl(url)) if(URL(url).path != "" && URL(url).path.length > 1) URL(url).path else URL(url).host else ""
-}
-
-@Composable
-private fun getColor(): Color{
-    return if(isSystemInDarkTheme()) Color.White else Color.DarkGray
 }
 
 @Composable

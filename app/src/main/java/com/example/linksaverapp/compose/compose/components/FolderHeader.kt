@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -56,7 +57,8 @@ fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: Fold
                 text = title,
                 fontSize = 18.sp,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 
@@ -68,7 +70,8 @@ fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: Fold
                     text = "$number/5",
                     fontSize = 18.sp,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             IconButton(
@@ -77,7 +80,8 @@ fun FolderHeader(title: String, expandedState: MutableState<Boolean>, type: Fold
                 onClick = {expandedState.value = !expandedState.value}) {
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "Drop-Down Arrow"
+                    contentDescription = "Drop-Down Arrow",
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }

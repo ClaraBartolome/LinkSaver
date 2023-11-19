@@ -34,9 +34,9 @@ fun StartScreen(
     isBottomSheetOpen: MutableState<Boolean>,
     isAlertAddFolderOpen: MutableState<Boolean>,
     isDeviceUnlocked: MutableState<Boolean>,
-    onDeleteLink: @Composable() (LinkModel) -> Unit,
-    onEditLink: @Composable() (LinkModel) -> Unit,
-    onAddFavLink: @Composable() (LinkModel) -> Unit,
+    onDeleteLink: @Composable (LinkModel) -> Unit,
+    onEditLink: @Composable (LinkModel) -> Unit,
+    onAddFavLink: @Composable (LinkModel) -> Unit,
     folderNameValid: MutableState<Boolean>,
     onShareLink: (String, String) -> Unit,
     onClickAction: (String) -> Unit
@@ -49,7 +49,7 @@ fun StartScreen(
     val linkFolder = remember { mutableStateOf("") }
     val linkProtected = remember { mutableStateOf(0) }
 
-    val addLinktoFolder = remember { mutableStateOf(false) }
+    val addLinkToFolder = remember { mutableStateOf(false) }
     allLinks.value?.let {
         Column {
             ExpandableLinkList(folderName = stringResource(id = favoritesStringID),
@@ -86,7 +86,7 @@ fun StartScreen(
             }
             if (folderMap.containsKey("") && folderMap[""] != null) {
                 folderMap[""]?.let { list ->
-                    LazyColumn() {
+                    LazyColumn {
                         items(list) {
                             if(it.isProtected == 0 || isDeviceUnlocked.value){
                                 LinkCard(it.name, it.link, onLinkLongPressed = {
@@ -109,7 +109,7 @@ fun StartScreen(
 
     if (isBottomSheetOpen.value) {
         LinkActionsSheet(
-            linkFolder.value.equals(stringResource(id = favoritesStringID)),
+            linkFolder.value == stringResource(id = favoritesStringID),
             onDismissSheet = {
                 isBottomSheetOpen.value = false
             },
@@ -148,14 +148,14 @@ fun StartScreen(
                         linkText.value,
                         linkDateOg.value,
                         linkDateMod.value,
-                        if(linkFolder.value.equals(stringResource(id = favoritesStringID))) "" else stringResource(id = favoritesStringID),
+                        if(linkFolder.value == stringResource(id = favoritesStringID)) "" else stringResource(id = favoritesStringID),
                         linkProtected.value
                     )
                 )
                 isBottomSheetOpen.value = false
-                folderToast(isFavorite = linkFolder.value.equals(stringResource(id = favoritesStringID)), isFolderNameValid = folderNameValid.value)
+                folderToast(isFavorite = linkFolder.value == stringResource(id = favoritesStringID), isFolderNameValid = folderNameValid.value)
             },
-            onAddtoFolder = {
+            onAddToFolder = {
                 isAlertAddFolderOpen.value = true
                 isBottomSheetOpen.value = false
             })
@@ -168,11 +168,11 @@ fun StartScreen(
             folderList = folderMap.keys,
             onDismissRequest = { isAlertAddFolderOpen.value = false},
             onConfirmation =  {
-                addLinktoFolder.value = true
+                addLinkToFolder.value = true
             })
     }
 
-    if(addLinktoFolder.value){
+    if(addLinkToFolder.value){
         onAddFavLink.invoke(
             LinkModel(
                 linkId.value,
@@ -185,7 +185,7 @@ fun StartScreen(
             )
         )
         if(folderNameValid.value){
-            addLinktoFolder.value = false
+            addLinkToFolder.value = false
             isAlertAddFolderOpen.value = false
         }
     }
@@ -203,11 +203,11 @@ private fun folderToast(isFavorite: Boolean, isFolderNameValid: Boolean): Boolea
 private fun LinkActionsSheet(
     isFavorite: Boolean,
     onDismissSheet: () -> Unit,
-    onDeleteLink: @Composable() () -> Unit,
+    onDeleteLink: @Composable () -> Unit,
     onShareLink: () -> Unit,
-    onEditLink: @Composable() () -> Unit,
-    onAddFavLink: @Composable() () -> Unit,
-    onAddtoFolder: @Composable() () -> Unit,
+    onEditLink: @Composable () -> Unit,
+    onAddFavLink: @Composable () -> Unit,
+    onAddToFolder: @Composable () -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
@@ -236,7 +236,7 @@ private fun LinkActionsSheet(
             onFavLink = {
                 onAddFavLink.invoke()
             },
-            onAddToFolder = {onAddtoFolder.invoke()})
+            onAddToFolder = {onAddToFolder.invoke()})
         Spacer(Modifier.height(64.dp))
     }
 }
