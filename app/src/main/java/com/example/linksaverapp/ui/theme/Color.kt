@@ -2,11 +2,6 @@ package com.example.linksaverapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-
 val green50 = Color(0xFFF1F8E9)
 val containerLightGreen = Color(0xFFC2FFD4)
 val toolbarLightGreen = Color(0xFF297C42)
@@ -34,7 +29,7 @@ val toolbarLightYellow= Color(0xFFDAB600)
 val toolbarDarkYellow= Color(0xFF756309)
 val colorSelected = Color(0xFF007B88)
 
-val whiteAlfaMedium = Color(0x80FFFFFF)
+val blackBG = Color(0xFF2B2B2B)
 val whiteAlfaLow = Color(0x40FFFFFF)
 
 val softPink = Color(0xFFF48FB1)

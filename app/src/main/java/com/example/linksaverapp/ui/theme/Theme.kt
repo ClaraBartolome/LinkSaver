@@ -9,51 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.linksaverapp.Utils.ColorThemeOptions
 
-private val LightColorScheme = lightColorScheme(
-    primary = toolbarLightGreen,
-    onPrimary = Color.White,
-    primaryContainer = containerLightGreen,
-    onPrimaryContainer = Color.Black,
-    surface = Color.White,
-    onSurface = Color.Black,
-    background = Color.White,
-    onBackground = Color.Black,
-// ..
-)
-private val DarkColorScheme = darkColorScheme(
-    primary = toolbarLightGreen,
-    onPrimary = Color.White,
-    primaryContainer = containerLightGreen,
-    onPrimaryContainer = Color.Black,
-    surface = Color.Black,
-    onSurface = Color.White,
-    background = Color.Black,
-    onBackground = Color.White
-// ..
-)
-
-private val LightColorRedScheme = lightColorScheme(
-    primary = toolbarLightRed,
-    onPrimary = Color.White,
-    primaryContainer = containerLightRed,
-    onPrimaryContainer = Color.Black,
-    surface = Color.White,
-    onSurface = Color.Black,
-    background = Color.White,
-    onBackground = Color.Black,
-// ..
-)
-private val DarkColorRedScheme = darkColorScheme(
-    primary = toolbarLightRed,
-    onPrimary = Color.White,
-    primaryContainer = containerLightRed,
-    onPrimaryContainer = Color.Black,
-    surface = Color.Black,
-    onSurface = Color.White,
-    background = Color.Black,
-    onBackground = Color.White
-// ..
-)
 
 @Composable
 fun LinkSaverAppTheme(
@@ -81,6 +36,7 @@ private fun setColorScheme(isDarkTheme: Boolean, color: ColorThemeOptions): Colo
             onPrimaryContainer = Color.Black,
             secondaryContainer = Color.White,
             onSecondaryContainer = Color.Black,
+            onTertiaryContainer = color.lightColor,
             surface = Color.White,
             onSurface = Color.Black,
             background = Color.White,
@@ -95,9 +51,10 @@ private fun setColorScheme(isDarkTheme: Boolean, color: ColorThemeOptions): Colo
             onPrimaryContainer = Color.White,
             secondaryContainer = Color.DarkGray,
             onSecondaryContainer = Color.White,
-            surface = Color.Black,
+            onTertiaryContainer = color.lightColor,
+            surface = blackBG,
             onSurface = Color.White,
-            background = Color.Black,
+            background = blackBG,
             onBackground = Color.White
 // ..
         )

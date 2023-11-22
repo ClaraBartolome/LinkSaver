@@ -1,5 +1,6 @@
 package com.example.linksaverapp.compose.compose
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,7 +67,7 @@ private fun ItemSetting(text: String, icon: ImageVector, onClick:@Composable () 
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)){
-            Icon(imageVector =  icon, contentDescription = "", tint = MaterialTheme.colorScheme.primary)
+            Icon(imageVector =  icon, contentDescription = "", tint = MaterialTheme.colorScheme.onTertiaryContainer)
             Text(
                 text = text,
                 modifier = Modifier.padding(start = 8.dp),
@@ -94,7 +95,7 @@ private fun ItemSettingColor(text: String, icon: ImageVector, onClick: @Composab
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 16.dp)){
             Row(){
-                Icon(imageVector =  icon, contentDescription = "", tint = MaterialTheme.colorScheme.primary)
+                Icon(imageVector =  icon, contentDescription = "", tint = MaterialTheme.colorScheme.onTertiaryContainer)
                 Text(
                     text = text,
                     modifier = Modifier.padding(start = 8.dp),
@@ -125,7 +126,7 @@ private fun ItemSettingSwitch(text: String, icon: ImageVector,  switchChecked: M
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 16.dp)){
             Row(){
-                Icon(imageVector =  icon, contentDescription = "", tint = MaterialTheme.colorScheme.primary)
+                Icon(imageVector =  icon, contentDescription = "", tint = MaterialTheme.colorScheme.onTertiaryContainer)
                 Text(
                     text = text,
                     modifier = Modifier.padding(start = 8.dp),
