@@ -10,9 +10,9 @@ import androidx.compose.ui.graphics.Color
 import com.example.linksaverapp.Utils.ColorThemeOptions
 
 private val LightColorScheme = lightColorScheme(
-    primary = mediumGreen,
+    primary = toolbarLightGreen,
     onPrimary = Color.White,
-    primaryContainer = green100,
+    primaryContainer = containerLightGreen,
     onPrimaryContainer = Color.Black,
     surface = Color.White,
     onSurface = Color.Black,
@@ -21,9 +21,9 @@ private val LightColorScheme = lightColorScheme(
 // ..
 )
 private val DarkColorScheme = darkColorScheme(
-    primary = mediumGreen,
+    primary = toolbarLightGreen,
     onPrimary = Color.White,
-    primaryContainer = green100,
+    primaryContainer = containerLightGreen,
     onPrimaryContainer = Color.Black,
     surface = Color.Black,
     onSurface = Color.White,
@@ -33,9 +33,9 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorRedScheme = lightColorScheme(
-    primary = mediumRed,
+    primary = toolbarLightRed,
     onPrimary = Color.White,
-    primaryContainer = red100,
+    primaryContainer = containerLightRed,
     onPrimaryContainer = Color.Black,
     surface = Color.White,
     onSurface = Color.Black,
@@ -44,9 +44,9 @@ private val LightColorRedScheme = lightColorScheme(
 // ..
 )
 private val DarkColorRedScheme = darkColorScheme(
-    primary = mediumRed,
+    primary = toolbarLightRed,
     onPrimary = Color.White,
-    primaryContainer = red100,
+    primaryContainer = containerLightRed,
     onPrimaryContainer = Color.Black,
     surface = Color.Black,
     onSurface = Color.White,

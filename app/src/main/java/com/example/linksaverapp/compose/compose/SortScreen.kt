@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.Utils.SortRadioOptions
-import com.example.linksaverapp.ui.theme.mediumGreen
+import com.example.linksaverapp.ui.theme.toolbarLightGreen
 
 @Composable
 fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: List<SortRadioOptions>) {
@@ -49,7 +49,7 @@ fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: Lis
                     selected = (option == selectedOption.value),
                     onClick = null, // null recommended for accessibility with screenreaders
                     colors = RadioButtonDefaults.colors(
-                        selectedColor = mediumGreen,
+                        selectedColor = toolbarLightGreen,
                     )
                 )
                 Text(

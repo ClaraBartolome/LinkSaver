@@ -2,12 +2,30 @@ package com.example.linksaverapp.Utils
 
 import androidx.compose.ui.graphics.Color
 import com.example.linksaverapp.R
-import com.example.linksaverapp.ui.theme.darkGreen
-import com.example.linksaverapp.ui.theme.darkRed
-import com.example.linksaverapp.ui.theme.green100
-import com.example.linksaverapp.ui.theme.mediumGreen
-import com.example.linksaverapp.ui.theme.mediumRed
-import com.example.linksaverapp.ui.theme.red100
+import com.example.linksaverapp.ui.theme.containerLightBlue
+import com.example.linksaverapp.ui.theme.containerLightGray
+import com.example.linksaverapp.ui.theme.toolbarDarkGreen
+import com.example.linksaverapp.ui.theme.toolbarDarkRed
+import com.example.linksaverapp.ui.theme.containerLightGreen
+import com.example.linksaverapp.ui.theme.containerLightPurple
+import com.example.linksaverapp.ui.theme.toolbarLightGreen
+import com.example.linksaverapp.ui.theme.toolbarLightRed
+import com.example.linksaverapp.ui.theme.containerLightRed
+import com.example.linksaverapp.ui.theme.containerLightTeal
+import com.example.linksaverapp.ui.theme.containerLightViolet
+import com.example.linksaverapp.ui.theme.containerLightYellow
+import com.example.linksaverapp.ui.theme.toolbarDarkBlue
+import com.example.linksaverapp.ui.theme.toolbarDarkGray
+import com.example.linksaverapp.ui.theme.toolbarDarkPurple
+import com.example.linksaverapp.ui.theme.toolbarDarkTeal
+import com.example.linksaverapp.ui.theme.toolbarDarkViolet
+import com.example.linksaverapp.ui.theme.toolbarDarkYellow
+import com.example.linksaverapp.ui.theme.toolbarLightBlue
+import com.example.linksaverapp.ui.theme.toolbarLightGray
+import com.example.linksaverapp.ui.theme.toolbarLightPurple
+import com.example.linksaverapp.ui.theme.toolbarLightTeal
+import com.example.linksaverapp.ui.theme.toolbarLightViolet
+import com.example.linksaverapp.ui.theme.toolbarLightYellow
 
 enum class LinkScreens(){
     Start,
@@ -43,13 +61,27 @@ enum class SortRadioOptions(val text: String){
 }
 
 enum class ColorThemeOptions(val lightColor: Color, val containerLightColor: Color, val darkColor: Color ){
-    Green(lightColor = mediumGreen, containerLightColor = green100, darkColor = darkGreen),
-    Red(lightColor = mediumRed, containerLightColor = red100, darkColor = darkRed)
+    Green(lightColor = toolbarLightGreen, containerLightColor = containerLightGreen, darkColor = toolbarDarkGreen),
+    Red(lightColor = toolbarLightRed, containerLightColor = containerLightRed, darkColor = toolbarDarkRed),
+    Blue(lightColor = toolbarLightBlue, containerLightColor = containerLightBlue, darkColor = toolbarDarkBlue),
+    Yellow(lightColor = toolbarLightYellow, containerLightColor = containerLightYellow, darkColor = toolbarDarkYellow),
+    Violet(lightColor = toolbarLightViolet, containerLightColor = containerLightViolet, darkColor = toolbarDarkViolet),
+    Purple(lightColor = toolbarLightPurple, containerLightColor = containerLightPurple, darkColor = toolbarDarkPurple),
+    Gray(lightColor = toolbarLightGray, containerLightColor = containerLightGray, darkColor = toolbarDarkGray),
+    Teal(lightColor = toolbarLightTeal, containerLightColor = containerLightTeal, darkColor = toolbarDarkTeal),
+    Black(lightColor = Color.DarkGray, containerLightColor = Color.LightGray, darkColor = Color.DarkGray),
 }
 
 val colorOptions = listOf(
+    ColorThemeOptions.Gray,
+    ColorThemeOptions.Black,
+    ColorThemeOptions.Red,
+    ColorThemeOptions.Yellow,
     ColorThemeOptions.Green,
-    ColorThemeOptions.Red
+    ColorThemeOptions.Blue,
+    ColorThemeOptions.Teal,
+    ColorThemeOptions.Violet,
+    ColorThemeOptions.Purple,
 )
 
 val radioOptions = listOf(
