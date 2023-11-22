@@ -31,13 +31,14 @@ import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
-fun Settings(isDarkTheme: MutableState<Boolean>, onWatchProtectedLinks: @Composable () -> Unit, onSelectAppColor: @Composable () -> Unit, onClickAboutApp: @Composable () -> Unit ) {
+fun Settings(isDarkTheme: MutableState<Boolean>, onWatchProtectedLinks: @Composable () -> Unit, onSelectAppColor: @Composable () -> Unit, onClickAboutApp: @Composable () -> Unit, onResetConfig: () -> Unit ) {
     val applyValidatePassword = remember {
         mutableStateOf(false)
     }
     LazyColumn(){
         item {
-            ItemSetting(text = "Reestablecer valores predeterminados", icon = Icons.Outlined.Refresh, {}, remember {
+            ItemSetting(text = "Reestablecer valores predeterminados", icon = Icons.Outlined.Refresh,
+                { onResetConfig.invoke() }, remember {
                 mutableStateOf(false)
             })
         }
@@ -147,6 +148,6 @@ private fun ItemSettingSwitch(text: String, icon: ImageVector,  switchChecked: M
 @Composable
 private fun AddLinkScreenPreview() {
     LinkSaverAppTheme {
-        Settings(remember{mutableStateOf(false)},{},{}, {} )
+        Settings(remember{mutableStateOf(false)},{},{}, {}, {} )
     }
 }

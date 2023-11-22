@@ -3,6 +3,7 @@ package com.example.linksaverapp.compose.compose
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +17,7 @@ import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
 fun AboutAppScreen() {
-    Column (horizontalAlignment = Alignment.CenterHorizontally) {
+    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "LinkSaver version 1.0.0",

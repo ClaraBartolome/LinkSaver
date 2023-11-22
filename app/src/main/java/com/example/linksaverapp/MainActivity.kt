@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import com.example.linksaverapp.Utils.ColorThemeOptions
 import com.example.linksaverapp.compose.compose.CreateUI
+import com.example.linksaverapp.compose.getColorTheme
+import com.example.linksaverapp.compose.getDarkMode
 import com.example.linksaverapp.db.LinksSaverApplication
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
@@ -27,8 +29,8 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val isDarkTheme = remember { mutableStateOf(false) }
-            val colorChosen = remember { mutableStateOf(ColorThemeOptions.Green) }
+            val isDarkTheme = remember { mutableStateOf(getDarkMode(this)) }
+            val colorChosen = remember { mutableStateOf(getColorTheme(this)) }
             LinkSaverAppTheme (darkTheme = isDarkTheme.value, color = colorChosen.value) {
                 // A surface container using the 'background' color from the theme
                 Surface(

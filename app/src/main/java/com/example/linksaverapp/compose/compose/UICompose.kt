@@ -33,6 +33,7 @@ import com.example.linksaverapp.compose.copyToClipboard
 import com.example.linksaverapp.compose.getDate
 import com.example.linksaverapp.compose.insertLink
 import com.example.linksaverapp.compose.openLink
+import com.example.linksaverapp.compose.saveConfig
 import com.example.linksaverapp.compose.shareLink
 import com.example.linksaverapp.compose.sortFolderList
 import com.example.linksaverapp.compose.sortedLinkList
@@ -132,6 +133,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel, isDarkTheme: MutableState<B
                         folderMap = linkList
                     )
                 },
+                exitSettingsAction = { saveConfig(activity, isDarkTheme, colorChosen, navController) },
                 searchText = searchText,
                 onTextChange = { text -> searchText.value = text },
                 onClickOnSearched = { openLink(ctx, it) },
@@ -225,7 +227,12 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel, isDarkTheme: MutableState<B
                     isDarkTheme = isDarkTheme,
                     onWatchProtectedLinks = { validatePassword(context = ctx, activity = activity, executor = executor, isDeviceUnlocked) },
                     onSelectAppColor = {navController.navigate(LinkScreens.ChangeColor.name)},
-                    onClickAboutApp = {navController.navigate(LinkScreens.AboutApp.name)}
+                    onClickAboutApp = {navController.navigate(LinkScreens.AboutApp.name)},
+                    onResetConfig = {
+                        isDarkTheme.value = false
+                        colorChosen.value = ColorThemeOptions.Gray
+                        saveConfig(activity, isDarkTheme, colorChosen, navController)
+                    }
                     )
             }
             composable(route = LinkScreens.ChangeColor.name) {

@@ -15,7 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.linksaverapp.LinkSaverViewModel
+import com.example.linksaverapp.Utils.ColorThemeOptions
+import com.example.linksaverapp.Utils.PREFERENCES_COLOR_THEME
+import com.example.linksaverapp.Utils.PREFERENCES_DARK_MODE
+import com.example.linksaverapp.Utils.PREFERENCE_FILE
 import com.example.linksaverapp.Utils.SortRadioOptions
 import com.example.linksaverapp.compose.compose.TAG
 import com.example.linksaverapp.compose.viewHelperVar.favoritesString
@@ -27,45 +33,54 @@ import java.util.Locale
 import java.util.concurrent.Executor
 
 
-object viewHelperVar{
+object viewHelperVar {
     var favoritesString = ""
 }
 
-//PODRIA HACER UNA CONFIGURACION PARA MOSTRAR POR DEFECTO EL HOST O EL PATH
-fun testURL(): String {
-    val url = URL("https://developer.android.com/jetpack/compose/tutorial?hl=es-419")
-    return url.path
+fun saveConfig(activity: FragmentActivity, isDarkTheme: MutableState<Boolean>, colorTheme: MutableState<ColorThemeOptions>, navController: NavHostController){
+    setColorTheme(activity, colorTheme = colorTheme)
+    setDarkMode(activity, isDarkTheme = isDarkTheme)
+    navController.popBackStack()
 }
 
-fun sortLinks(context: Context) {
-    Toast.makeText(context, "Próximamente", Toast.LENGTH_SHORT).show()
+fun getDarkMode(activity: FragmentActivity): Boolean {
+    return activity.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
+        .getBoolean(PREFERENCES_DARK_MODE, false)
 }
 
-fun searchLink(context: Context) {
-    Toast.makeText(context, "Próximamente", Toast.LENGTH_SHORT).show()
+fun setDarkMode(activity: FragmentActivity, isDarkTheme: MutableState<Boolean>) {
+    activity.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE).edit().putBoolean(
+        PREFERENCES_DARK_MODE, isDarkTheme.value
+    ).apply()
 }
 
-fun createLinkModel(
-    id: Int,
-    name: String,
-    link: String,
-    dateOfCreation: String,
-    dateOfModified: String,
-    folder: String,
-    isProtected: Int
-): LinkModel {
-    return LinkModel(id, name, link, dateOfCreation, dateOfModified, folder, isProtected)
+fun getColorTheme(activity: FragmentActivity): ColorThemeOptions {
+    return ColorThemeOptions.toColorThemeOption(
+        activity.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE).getString(
+            PREFERENCES_COLOR_THEME, ColorThemeOptions.Gray.name
+        )
+    )
+}
+
+fun setColorTheme(activity: FragmentActivity, colorTheme: MutableState<ColorThemeOptions>) {
+    activity.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE).edit().putString(
+        PREFERENCES_COLOR_THEME, colorTheme.value.name
+    ).apply()
 }
 
 private fun validateLinkModel(name: String, link: String): Boolean {
     return name.isNotBlank() && link.isNotBlank()
 }
-private fun validateFolderName(name: String?, folderMap: MutableMap<String, MutableList<LinkModel>>): Boolean {
-    name?.let{ folderName ->
-        if(folderName.isBlank() || folderName.trimStart().trimEnd() != favoritesString){
+
+private fun validateFolderName(
+    name: String?,
+    folderMap: MutableMap<String, MutableList<LinkModel>>
+): Boolean {
+    name?.let { folderName ->
+        if (folderName.isBlank() || folderName.trimStart().trimEnd() != favoritesString) {
             return true
         }
-        folderMap[favoritesString]?.let{ list ->
+        folderMap[favoritesString]?.let { list ->
             return list.size < 5
         }
         return true
@@ -73,8 +88,9 @@ private fun validateFolderName(name: String?, folderMap: MutableMap<String, Muta
     return true
 }
 
-fun copyToClipboard(text: String, context: Context, activity: FragmentActivity){
-    val clipboard: ClipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+fun copyToClipboard(text: String, context: Context, activity: FragmentActivity) {
+    val clipboard: ClipboardManager =
+        activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText("Simple text", text)
     clipboard.setPrimaryClip(clip)
 }
@@ -85,8 +101,8 @@ fun validatePassword(
     activity: FragmentActivity,
     executor: Executor,
     isDeviceUnlocked: MutableState<Boolean>
-){
-    if(isDeviceSecured(context) && !isDeviceUnlocked.value){
+) {
+    if (isDeviceSecured(context) && !isDeviceUnlocked.value) {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("title")
             .setSubtitle("subtitle")
@@ -94,7 +110,7 @@ fun validatePassword(
             .build()
 
         val biometricPrompt = BiometricPrompt(activity, executor,
-            object: BiometricPrompt.AuthenticationCallback(){
+            object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     Toast.makeText(
@@ -120,8 +136,9 @@ fun validatePassword(
         )
 
         biometricPrompt.authenticate(promptInfo)
-    }else{
-        val text = if(isDeviceUnlocked.value) "Terminal desbloqueado" else "Configura una contraseña en el terminal para proteger los enlaces con contraseña"
+    } else {
+        val text =
+            if (isDeviceUnlocked.value) "Terminal desbloqueado" else "Configura una contraseña en el terminal para proteger los enlaces con contraseña"
         Toast.makeText(
             context, text, Toast.LENGTH_LONG
         ).show()
@@ -139,7 +156,10 @@ fun getDate(): String {
     return formatter.format(time)
 }
 
-fun sortFolderList(links: List<LinkModel>?, folderList: MutableMap<String, MutableList<LinkModel>>) {
+fun sortFolderList(
+    links: List<LinkModel>?,
+    folderList: MutableMap<String, MutableList<LinkModel>>
+) {
     folderList.clear()
     links?.let { list ->
         var lastName = list.first().folder ?: ""
@@ -162,22 +182,28 @@ fun sortFolderList(links: List<LinkModel>?, folderList: MutableMap<String, Mutab
 }
 
 @Composable
-fun SortTree(option: SortRadioOptions, linkSaverViewModel: LinkSaverViewModel){
-    when(option){
+fun SortTree(option: SortRadioOptions, linkSaverViewModel: LinkSaverViewModel) {
+    when (option) {
         SortRadioOptions.NameAZ -> {
-            GetAllLinksByNameAsc(linkSaverViewModel = linkSaverViewModel)}
+            GetAllLinksByNameAsc(linkSaverViewModel = linkSaverViewModel)
+        }
+
         SortRadioOptions.NameZA -> {
             GetAllLinksByNameDesc(linkSaverViewModel = linkSaverViewModel)
         }
+
         SortRadioOptions.CreationDateNewFirst -> {
             GetAllLinksByDateOfCreationAsc(linkSaverViewModel = linkSaverViewModel)
         }
+
         SortRadioOptions.CreationDateOldFirst -> {
             GetAllLinksByDateOfCreationDesc(linkSaverViewModel = linkSaverViewModel)
         }
+
         SortRadioOptions.ModDateNewFirst -> {
             GetAllLinksByDateOfModifiedAsc(linkSaverViewModel = linkSaverViewModel)
         }
+
         SortRadioOptions.ModDateOldFirst -> {
             GetAllLinksByDateOfModifiedDesc(linkSaverViewModel = linkSaverViewModel)
         }
@@ -185,16 +211,16 @@ fun SortTree(option: SortRadioOptions, linkSaverViewModel: LinkSaverViewModel){
 }
 
 
-fun shareLink(context:Context, name: String, link: String){
+fun shareLink(context: Context, name: String, link: String) {
     val sendIntent = Intent(
         Intent.ACTION_SEND
     )
         .setType("text/plain")
-    sendIntent.putExtra(Intent.EXTRA_TEXT,name + "\n\n" + link)
+    sendIntent.putExtra(Intent.EXTRA_TEXT, name + "\n\n" + link)
     context.startActivity(Intent.createChooser(sendIntent, "Share using:"))
 }
 
-fun openLink(context:Context, url: String){
+fun openLink(context: Context, url: String) {
     val urlIntent = Intent(
         Intent.ACTION_VIEW,
         Uri.parse(url)
@@ -202,8 +228,8 @@ fun openLink(context:Context, url: String){
     context.startActivity(urlIntent)
 }
 
-fun sortedLinkList(links: List<LinkModel>?, searchText: String): List<LinkModel>{
-    links?.let{
+fun sortedLinkList(links: List<LinkModel>?, searchText: String): List<LinkModel> {
+    links?.let {
         return it.filter { linkModel ->
             linkModel.name.lowercase().contains(searchText.lowercase())
         }.sortedBy { it.name }
@@ -264,7 +290,6 @@ private fun GetAllLinksByDateOfModifiedDesc(linkSaverViewModel: LinkSaverViewMod
 //endregion
 
 
-
 fun insertLink(
     linkSaverViewModel: LinkSaverViewModel,
     name: MutableState<String>,
@@ -292,9 +317,14 @@ fun insertLink(
 }
 
 
-fun updateLink(linkSaverViewModel: LinkSaverViewModel, link: LinkModel, folderNameIsValid: MutableState<Boolean>, folderMap: MutableMap<String, MutableList<LinkModel>>){
+fun updateLink(
+    linkSaverViewModel: LinkSaverViewModel,
+    link: LinkModel,
+    folderNameIsValid: MutableState<Boolean>,
+    folderMap: MutableMap<String, MutableList<LinkModel>>
+) {
     folderNameIsValid.value = validateFolderName(link.folder, folderMap)
-    if(folderNameIsValid.value){
+    if (folderNameIsValid.value) {
         linkSaverViewModel.updateLink(link)
         Log.i(TAG, "DB deleted link: $link")
     }

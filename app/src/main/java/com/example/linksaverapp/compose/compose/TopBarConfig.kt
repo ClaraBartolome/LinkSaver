@@ -30,6 +30,7 @@ fun TopAppBar(
     isAlertOpen: MutableState<Boolean>,
     insertLinkAction: () -> Unit,
     editLinkAction: () -> Unit,
+    exitSettingsAction: () -> Unit,
     searchText: MutableState<String>,
     onTextChange: (String) -> Unit,
     onSearchInit: () -> List<LinkModel>,
@@ -53,7 +54,8 @@ fun TopAppBar(
             isSearchOpen = isSearchOpen,
             isAlertOpen = isAlertOpen,
             addLinkAction = insertLinkAction,
-            editLinkAction = editLinkAction
+            editLinkAction = editLinkAction,
+            exitSettingsScreen = exitSettingsAction
         )
     }
 }
@@ -67,7 +69,8 @@ fun TopAppBarDefault(
     isSearchOpen: MutableState<Boolean>,
     isAlertOpen: MutableState<Boolean>,
     addLinkAction: () -> Unit,
-    editLinkAction: () -> Unit
+    editLinkAction: () -> Unit,
+    exitSettingsScreen: () -> Unit
 ) {
     TopAppBar(
         title = { TitleText(screen) },
@@ -79,11 +82,18 @@ fun TopAppBarDefault(
                         action = { navController.navigate(LinkScreens.Settings.name) })
                 }
 
-                LinkScreens.Settings, LinkScreens.SortingConfig, LinkScreens.ChangeColor, LinkScreens.AboutApp -> {
+                LinkScreens.SortingConfig, LinkScreens.ChangeColor, LinkScreens.AboutApp -> {
                     IconButtonApp(
                         iconId = R.drawable.ic_arrow_back,
                         action = { navController.popBackStack() })
                 }
+            LinkScreens.Settings-> {
+                IconButtonApp(
+                    iconId = R.drawable.ic_arrow_back,
+                    action = {
+                        exitSettingsScreen.invoke()
+                    })
+            }
                 else -> {
                     IconButtonApp(iconId = R.drawable.ic_arrow_back, action = {
                         if (screen == LinkScreens.Add || screen == LinkScreens.Edit) {

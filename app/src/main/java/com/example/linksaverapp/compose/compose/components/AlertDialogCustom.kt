@@ -1,6 +1,7 @@
 package com.example.linksaverapp.compose.compose.components
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -17,21 +18,22 @@ fun AlertDialogCustom(
 ) {
     AlertDialog(
         title = {
-            Text(text = dialogTitle, fontSize = 20.sp)
+            Text(text = dialogTitle, fontSize = 20.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
         },
         text = {
-            Text(text = dialogText)
+            Text(text = dialogText, color = MaterialTheme.colorScheme.onSecondaryContainer)
         },
         onDismissRequest = {
             onDismissRequest()
         },
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
         confirmButton = {
             TextButton(
                 onClick = {
                     onConfirmation()
                 }
             ) {
-                Text("Confirm")
+                Text("Confirm", color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
         },
         dismissButton = {
@@ -40,7 +42,7 @@ fun AlertDialogCustom(
                     onDismissRequest()
                 }
             ) {
-                Text("Dismiss")
+                Text("Dismiss", color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
         }
     )
