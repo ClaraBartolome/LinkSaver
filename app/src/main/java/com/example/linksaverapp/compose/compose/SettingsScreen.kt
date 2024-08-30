@@ -27,8 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.linksaverapp.R
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
@@ -38,22 +40,22 @@ fun Settings(isDarkTheme: MutableState<Boolean>, onWatchProtectedLinks: @Composa
     }
     LazyColumn(){
         item {
-            ItemSetting(text = "Reestablecer valores predeterminados", icon = Icons.Outlined.Refresh,
+            ItemSetting(text = stringResource(id = R.string.reset_default_values), icon = Icons.Outlined.Refresh,
                 { onResetConfig.invoke() }, remember {
                 mutableStateOf(false)
             })
         }
         item {
-            ItemSetting(text = "Ver enlaces ocultos", icon = Icons.Outlined.Lock, { onWatchProtectedLinks.invoke()}, applyValidatePassword)
+            ItemSetting(text = stringResource(id = R.string.see_hidden_links), icon = Icons.Outlined.Lock, { onWatchProtectedLinks.invoke()}, applyValidatePassword)
         }
         item {
-            ItemSettingSwitch(text = "Modo nocturno", icon = Icons.Outlined.Lock, isDarkTheme)
+            ItemSettingSwitch(text = stringResource(id = R.string.dark_mode), icon = Icons.Outlined.Lock, isDarkTheme)
         }
         item {
-            ItemSettingColor(text = "Cambiar esquema de color", icon = Icons.Outlined.Create, {onSelectAppColor.invoke()})
+            ItemSettingColor(text = stringResource(id = R.string.change_color_scheme), icon = Icons.Outlined.Create, {onSelectAppColor.invoke()})
         }
         item {
-            ItemSetting(text = "Acerca de...", icon = Icons.Outlined.Info, {onClickAboutApp.invoke()}, remember {
+            ItemSetting(text = stringResource(id = R.string.about_the_app), icon = Icons.Outlined.Info, {onClickAboutApp.invoke()}, remember {
                 mutableStateOf(false)
             })
         }

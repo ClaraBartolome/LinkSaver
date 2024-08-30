@@ -54,13 +54,13 @@ enum class SearchWidgetState {
     CLOSED
 }
 
-enum class SortRadioOptions(val text: String) {
-    NameAZ("Nombre (A-Z)"),
-    NameZA("Nombre (Z-A)"),
-    CreationDateNewFirst("Fecha de creación (Más recientes primero"),
-    CreationDateOldFirst("Fecha de creación (Más antiguos primero"),
-    ModDateNewFirst("Fecha de modificacion (Más recientes primero"),
-    ModDateOldFirst("Fecha de modificación (Más antiguos primero"),
+enum class SortRadioOptions(val text: Int) {
+    NameAZ(R.string.name_AZ),
+    NameZA(R.string.name_ZA),
+    CreationDateNewFirst(R.string.date_of_creation_ASC),
+    CreationDateOldFirst(R.string.date_of_creation_DESC),
+    ModDateNewFirst(R.string.date_of_mod_ASC),
+    ModDateOldFirst(R.string.date_of_mod_DESC),
 }
 
 enum class ColorThemeOptions(

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.linksaverapp.R
@@ -41,15 +42,15 @@ fun BottomBarConfig(
         val optionChosen = remember {
             mutableStateOf(BottomBarOption.None)
         }
-        ItemBottomBar(name = "Añadir a carpeta", icon = R.drawable.ic_add) { optionChosen.value = BottomBarOption.AddFolder }
+        ItemBottomBar(name = stringResource(id = R.string.add_to_folder), icon = R.drawable.ic_add) { optionChosen.value = BottomBarOption.AddFolder }
         Spacer(modifier = Modifier.height(8.dp))
-        ItemBottomBar(name = if(isFavorite)"Quitar de Favoritos" else "Añadir a favoritos", icon = if(isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border) { optionChosen.value = BottomBarOption.AddFavorite }
+        ItemBottomBar(name = if(isFavorite) stringResource(id = R.string.remove_from_favorites) else stringResource(id = R.string.add_to_favorites), icon = if(isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border) { optionChosen.value = BottomBarOption.AddFavorite }
         Spacer(modifier = Modifier.height(8.dp))
-        ItemBottomBar(name = "Compartir", icon = R.drawable.ic_share) {optionChosen.value = BottomBarOption.Share}
+        ItemBottomBar(name = stringResource(id = R.string.share), icon = R.drawable.ic_share) {optionChosen.value = BottomBarOption.Share}
         Spacer(modifier = Modifier.height(8.dp))
-        ItemBottomBar(name = "Editar", icon = R.drawable.ic_edit) {optionChosen.value = BottomBarOption.Edit}
+        ItemBottomBar(name = stringResource(id = R.string.edit), icon = R.drawable.ic_edit) {optionChosen.value = BottomBarOption.Edit}
         Spacer(modifier = Modifier.height(8.dp))
-        ItemBottomBar(name = "Borrar", icon = R.drawable.ic_delete, "") { optionChosen.value = BottomBarOption.Delete }
+        ItemBottomBar(name = stringResource(id = R.string.delete), icon = R.drawable.ic_delete, "") { optionChosen.value = BottomBarOption.Delete }
 
         when(optionChosen.value){
             BottomBarOption.Delete -> onDeleteLink()

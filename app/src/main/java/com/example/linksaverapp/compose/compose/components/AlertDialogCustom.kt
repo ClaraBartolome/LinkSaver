@@ -5,8 +5,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.linksaverapp.R
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 
 @Composable
@@ -33,7 +35,7 @@ fun AlertDialogCustom(
                     onConfirmation()
                 }
             ) {
-                Text("Confirm", color = MaterialTheme.colorScheme.onSecondaryContainer)
+                Text(stringResource(id = R.string.confirm), color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
         },
         dismissButton = {
@@ -42,7 +44,7 @@ fun AlertDialogCustom(
                     onDismissRequest()
                 }
             ) {
-                Text("Dismiss", color = MaterialTheme.colorScheme.onSecondaryContainer)
+                Text(stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
         }
     )

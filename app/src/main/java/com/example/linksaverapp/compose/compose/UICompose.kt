@@ -43,6 +43,7 @@ import com.example.linksaverapp.compose.viewHelperVar
 import com.example.linksaverapp.db.Model.LinkModel
 import com.example.linksaverapp.ui.theme.LinkSaverAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.example.linksaverapp.R
 
 val TAG = "START_SCREEN"
 
@@ -57,7 +58,6 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel, isDarkTheme: MutableState<B
     val screen = remember { mutableStateOf(LinkScreens.Start) }
 
     val linkList = remember { mutableStateMapOf<String, MutableList<LinkModel>>() }
-
 
     val linksObserver = Observer<List<LinkModel>> {
         sortFolderList(it, linkList)
@@ -185,7 +185,7 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel, isDarkTheme: MutableState<B
                         SortTree(option = selectedOption.value, linkSaverViewModel = linkSaverViewModel)
                     },
                     folderNameValid = isFolderNameValid,
-                    onCopyLink = {link -> copyToClipboard(link, ctx, activity) }
+                    onCopyLink = {link -> copyToClipboard(link, activity) }
                 )
             }
             composable(route = LinkScreens.Add.name) {
@@ -253,8 +253,8 @@ fun CreateUI(linkSaverViewModel: LinkSaverViewModel, isDarkTheme: MutableState<B
                     isAlertOpen.value = false
                     navController.popBackStack()
                 },
-                dialogTitle = "No has guardado los cambios",
-                dialogText = "¿Estás seguro de que quieres salir?"
+                dialogTitle = stringResource(id = R.string.changes_not_saved_label),
+                dialogText = stringResource(id = R.string.changes_not_saved_question)
             )
         }
     }

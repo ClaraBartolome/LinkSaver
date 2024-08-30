@@ -1,4 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="favorites">Favorites</string>
+    <string name="changes_not_saved_label">You haven\'t save your changes.</string>
+    <string name="changes_not_saved_question">Are you sure you want to exit?</string>
+    <string name="add_to_folder">Add to folder</string>
+    <string name="only_5_links">You can only save 5 links on \"Favorites\"</string>
+    <string name="confirm">Confirm</string>
+    <string name="biometric_login_label">Biometric login for see hidden links.</string>
+    <string name="biometric_login_subtitle">Log in using your biometric credential</string>
+    <string name="succeeded">Succeeded</string>
+    <string name="failed">Failed</string>
+    <string name="device_unlocked">Unlocked device</string>
+    <string name="set_password">Set a password on the terminal to password protect links</string>
+    <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
+    <string name="supporting_name_text">You have to provide a name</string>
+    <string name="link">Link</string>
+    <string name="supporting_link_text">You have to provide a link</string>
+    <string name="folder_not_provided_warning">If you leave the following field blank it will not be assigned to any folder</string>
+    <string name="is_private_link">Is it a private link?</string>
+    <string name="folder">Folder</string>
+    <string name="none">None</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="reset_default_values">Reset default values</string>
+    <string name="see_hidden_links">See hidden links</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="change_color_scheme">Change color scheme</string>
+    <string name="about_the_app">About the app</string>
+    <string name="sort_by">Sort by:</string>
+    <string name="link_removed">Link removed from favorites</string>
+    <string name="link_added">Link added to Favorites</string>
+    <string name="cant_add_more_links">You can\'t add more links to favorites</string>
+    <string name="name_AZ">Name (A-Z)</string>
+    <string name="name_ZA">Name (Z-A)</string>
+    <string name="date_of_creation_ASC">Date of Creation (Newest First)</string>
+    <string name="date_of_creation_DESC">Date of Creation (Oldest First)</string>
+    <string name="date_of_mod_ASC">Date of Modification (Newest First)</string>
+    <string name="date_of_mod_DESC">Date of Modification (Oldest First)</string>
 </resources>

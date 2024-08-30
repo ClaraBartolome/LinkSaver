@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.linksaverapp.R
 import com.example.linksaverapp.Utils.favoritesStringID
 import com.example.linksaverapp.compose.compose.ItemFolderSuggestion
 import com.example.linksaverapp.compose.compose.OutlinedTextFieldFolderCustom
@@ -54,8 +55,6 @@ fun AlertDialogAddToFolder(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
 ) {
-
-    val favorites = stringResource(id = favoritesStringID)
     val showClearButton = remember { mutableStateOf(false) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -75,7 +74,7 @@ fun AlertDialogAddToFolder(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Añadir a carpeta",
+                            text = stringResource(id = R.string.add_to_folder),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
@@ -121,7 +120,7 @@ fun AlertDialogAddToFolder(
                         if (!folderNameValid.value) {
                             item {
                                 androidx.compose.material.Text(
-                                    "Solo puedes guardar 5 enlaces en 'Favoritos'",
+                                    stringResource(id = R.string.only_5_links),
                                     fontSize = 12.sp,
                                     color = Color.Red,
                                     modifier = Modifier.padding(top = 4.dp)
@@ -185,7 +184,7 @@ fun AlertDialogAddToFolder(
                                         .height(50.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                                 ) {
-                                    Text(text = "Confirmar", color = MaterialTheme.colorScheme.onSecondaryContainer)
+                                    Text(text = stringResource(id = R.string.confirm), color = MaterialTheme.colorScheme.onSecondaryContainer)
                                 }
                             }
                         }

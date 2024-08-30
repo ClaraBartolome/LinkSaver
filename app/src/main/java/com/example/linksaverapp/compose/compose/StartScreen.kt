@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.linksaverapp.R
 import com.example.linksaverapp.Utils.favoritesStringID
 import com.example.linksaverapp.compose.compose.components.AlertDialogAddToFolder
 import com.example.linksaverapp.compose.compose.components.ExpandableLinkList
@@ -197,7 +198,7 @@ fun StartScreen(
 
 @Composable
 private fun folderToast(isFavorite: Boolean, isFolderNameValid: Boolean): Boolean{
-    val toastText= if(isFavorite) "Enlace retirado de Favoritos" else if(isFolderNameValid) "Enlace añadido a Favoritos"  else "No puedes añadir más enlaces a Favoritos"
+    val toastText= if(isFavorite) stringResource(id = R.string.link_removed) else if(isFolderNameValid) stringResource(id = R.string.link_added)  else stringResource(id = R.string.cant_add_more_links)
     Toast.makeText(LocalContext.current, toastText, Toast.LENGTH_SHORT).show()
     return false
 }

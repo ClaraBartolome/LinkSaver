@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites">Favoritos</string>
+    <string name="changes_not_saved_label">No has guardado los cambios.</string>
+    <string name="changes_not_saved_question">¿Estás seguro de que quieres salir?</string>
+    <string name="add_to_folder">Añadir a carpeta</string>
+    <string name="only_5_links">Solo puedes guardar 5 enlaces en favoritos.</string>
+    <string name="confirm">Confirmar</string>
+    <string name="biometric_login_label">Inicio de sesión biométrico para ver enlaces ocultos.</string>
+    <string name="biometric_login_subtitle">Inicie sesión con su credencial biométrica</string>
+    <string name="succeeded">Éxito</string>
+    <string name="failed">Fallo</string>
+    <string name="device_unlocked">Dispositivo desbloqueado</string>
+    <string name="set_password">Configura una contraseña en el terminal para proteger los enlaces con contraseña</string>
+    <string name="cancel">Cancelar</string>
+    <string name="name">Nombre</string>
+    <string name="supporting_name_text">Tienes que introducir un nombre</string>
+    <string name="link">Enlace</string>
+    <string name="supporting_link_text">Tienes que introducir un enlace</string>
+    <string name="folder_not_provided_warning">Si dejas el siguiente campo en blanco no se asignará a ninguna carpeta</string>
+    <string name="is_private_link">¿Es un link privado?</string>
+    <string name="folder">Carpeta</string>
+    <string name="none">Ninguna</string>
+    <string name="remove_from_favorites">Quitar de Favoritos</string>
+    <string name="add_to_favorites">Añadir a Favoritos</string>
+    <string name="share">Compartir</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Borrar</string>
+    <string name="reset_default_values">Reestablecer valores predeterminados</string>
+    <string name="see_hidden_links">Ver enlaces ocultos</string>
+    <string name="dark_mode">Modo nocturno</string>
+    <string name="change_color_scheme">Cambiar esquema de color</string>
+    <string name="about_the_app">Acerca de...</string>
+    <string name="sort_by">Ordenar por:</string>
+    <string name="link_removed">Enlace retirado de Favoritos</string>
+    <string name="link_added">Enlace añadido a Favoritos</string>
+    <string name="cant_add_more_links">No puedes añadir más enlaces a Favoritos</string>
+    <string name="name_AZ">Nombre (A-Z)</string>
+    <string name="name_ZA">Nombre (Z-A)</string>
+    <string name="date_of_creation_ASC">Fecha de creación (Más recientes primero)</string>
+    <string name="date_of_creation_DESC">Fecha de creación (Más antiguos primero)</string>
+    <string name="date_of_mod_ASC">Fecha de modificación (Más recientes primero)</string>
+    <string name="date_of_mod_DESC">Fecha de modificación (Más antiguos primero)</string>
+</resources>

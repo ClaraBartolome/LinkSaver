@@ -14,10 +14,12 @@ import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.linksaverapp.LinkSaverViewModel
+import com.example.linksaverapp.R
 import com.example.linksaverapp.Utils.ColorThemeOptions
 import com.example.linksaverapp.Utils.PREFERENCES_COLOR_THEME
 import com.example.linksaverapp.Utils.PREFERENCES_DARK_MODE
@@ -88,7 +90,7 @@ private fun validateFolderName(
     return true
 }
 
-fun copyToClipboard(text: String, context: Context, activity: FragmentActivity) {
+fun copyToClipboard(text: String, activity: FragmentActivity) {
     val clipboard: ClipboardManager =
         activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText("Simple text", text)
@@ -104,32 +106,35 @@ fun validatePassword(
 ) {
     if (isDeviceSecured(context) && !isDeviceUnlocked.value) {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("title")
-            .setSubtitle("subtitle")
+            .setTitle(stringResource(id = R.string.biometric_login_label))
+            .setSubtitle(stringResource(id = R.string.biometric_login_subtitle))
             .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
             .build()
 
+        val error = stringResource(id = R.string.error)
+        val succeeded = stringResource(id = R.string.succeeded)
+        val failed = stringResource(id = R.string.failed)
         val biometricPrompt = BiometricPrompt(activity, executor,
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     Toast.makeText(
                         context,
-                        "error",
+                        error,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    Toast.makeText(context, "succeeded!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, succeeded, Toast.LENGTH_SHORT).show()
                     isDeviceUnlocked.value = true
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
                     Toast.makeText(
-                        context, "failed", Toast.LENGTH_SHORT
+                        context, failed, Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -138,7 +143,7 @@ fun validatePassword(
         biometricPrompt.authenticate(promptInfo)
     } else {
         val text =
-            if (isDeviceUnlocked.value) "Terminal desbloqueado" else "Configura una contraseña en el terminal para proteger los enlaces con contraseña"
+            if (isDeviceUnlocked.value) stringResource(id = R.string.device_unlocked) else stringResource(id = R.string.set_password)
         Toast.makeText(
             context, text, Toast.LENGTH_LONG
         ).show()

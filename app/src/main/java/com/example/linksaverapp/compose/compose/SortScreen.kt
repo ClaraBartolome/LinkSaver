@@ -8,16 +8,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.example.linksaverapp.R
 import com.example.linksaverapp.Utils.SortRadioOptions
 import com.example.linksaverapp.ui.theme.toolbarLightGreen
 
@@ -27,10 +29,7 @@ fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: Lis
     Column(Modifier.selectableGroup()) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Ordenar por:",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(start = 16.dp),
-            color = MaterialTheme.colorScheme.onBackground,
+            text = stringResource(id = R.string.sort_by)
         )
         radioOptions.forEach { option ->
             Row(
@@ -53,10 +52,7 @@ fun SortScreen(selectedOption: MutableState<SortRadioOptions>, radioOptions: Lis
                     )
                 )
                 Text(
-                    text = option.text,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 16.dp),
-                    color = MaterialTheme.colorScheme.onBackground,
+                    text = stringResource(id = option.text),
                 )
             }
         }

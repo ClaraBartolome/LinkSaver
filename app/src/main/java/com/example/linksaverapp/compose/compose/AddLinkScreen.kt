@@ -89,8 +89,8 @@ fun AddLinkScreen(
             valueText = nameText,
             linkModelValid = linkModelValid,
             showClearButton = showClearNameButton,
-            labelText = "Nombre",
-            supportingText = "Tienes que introducir un nombre"
+            labelText = stringResource(id = R.string.name),
+            supportingText = stringResource(id = R.string.supporting_name_text)
         ){name ->
             nameText.value = name
         }
@@ -99,14 +99,14 @@ fun AddLinkScreen(
             valueText = linkText,
             linkModelValid = linkModelValid,
             showClearButton = showClearLinkButton,
-            labelText = "Enlace",
-            supportingText = "Tienes que introducir un enlace"
+            labelText = stringResource(id = R.string.link),
+            supportingText = stringResource(id = R.string.supporting_link_text)
         ){link->
             linkText.value = link
             nameText.value = getName(link)
         }
 
-        Text("Si dejas el siguiente campo en blanco no se asignará a ninguna carpeta",
+        Text(stringResource(id = R.string.folder_not_provided_warning),
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(top = 4.dp))
@@ -137,7 +137,7 @@ fun AddLinkScreen(
 
             if(!folderValid.value){
                item{
-                   Text("Solo puedes guardar 5 enlaces en 'Favoritos'",
+                   Text(stringResource(id = R.string.only_5_links),
                        fontSize = 12.sp,
                        color = Color.Red,
                        modifier = Modifier.padding(top = 4.dp))
@@ -190,9 +190,9 @@ fun AddLinkScreen(
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(top = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-            Text("¿Es un link privado?", color = MaterialTheme.colorScheme.onBackground)
+            Text(stringResource(id = R.string.is_private_link), color = MaterialTheme.colorScheme.onBackground)
             ElevatedButton(onClick = { isProtected.value = !isProtected.value }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                Text(if(isProtected.value)"Invisible" else "Visible", modifier = Modifier.padding(end = 8.dp), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.bodyLarge)
+                Text(if(isProtected.value) stringResource(id = R.string.invisible) else stringResource(id = R.string.visible), modifier = Modifier.padding(end = 8.dp), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.bodyLarge)
                 Image(painter = painterResource(id = if(isProtected.value)R.drawable.ic_visibility_off else R.drawable.ic_visibility_on), contentDescription = "", colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary))
             }
         }
@@ -253,7 +253,7 @@ fun OutlinedTextFieldFolderCustom(
     val focusManager = LocalFocusManager.current
     OutlinedTextField(value = valueText.value,
         onValueChange = { onValueChange.invoke(it) },
-        label = { Text("Carpeta", color = MaterialTheme.colorScheme.onBackground)},
+        label = { Text(stringResource(id = R.string.folder), color = MaterialTheme.colorScheme.onBackground)},
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -262,7 +262,7 @@ fun OutlinedTextFieldFolderCustom(
             focusManager.moveFocus(FocusDirection.Down)
         }),
         isError = !folderNameValid.value,
-        placeholder = { Text("None", color = getPlaceholderColor())},
+        placeholder = { Text(stringResource(id = R.string.none), color = getPlaceholderColor())},
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Text
