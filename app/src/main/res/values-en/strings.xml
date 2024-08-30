@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">LinkSaver</string>
     <string name="favorites">Favorites</string>
     <string name="changes_not_saved_label">You haven\'t save your changes.</string>
     <string name="changes_not_saved_question">Are you sure you want to exit?</string>
