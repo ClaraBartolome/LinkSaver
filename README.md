@@ -1,4 +1,4 @@
-# Linksaver
+# <img src="assets/icon.png" width="40" height="40"> Linksaver 
 Linksaver is an Android application created for saving web links. It's available in Spanish and English. 
 
 ## Main Menu
